@@ -1,0 +1,112 @@
+::root {
+    /* -- notes design -- */
+    --note-background: #111;
+    --note-: #111;
+    --note-background: #111;
+    /* -- notes content -- */
+    --content-header: #111;
+    --content-content: #222;
+    --content-links: #333;
+    --content-date: #444;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    background-color: #fff;
+}
+
+.nav-menu {
+    position: fixed;
+    padding: 15px 30px 15px 30px;
+    display: flex;
+    background-color: #fff;
+    width: 100%;
+    border-bottom: 1px solid #111;
+    z-index: 1;
+    .logo {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 900;
+        font-size: 30px;
+        color: #111;
+        padding-right: 25px;
+        text-decoration: none;
+    }
+    button {
+        outline: none;
+        border: 0;
+        padding: 0px 12.5px;
+        font-size: 20px;
+        border-radius: 50vh;
+        transition: .2s;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #b8b8b8;
+    }
+    button:active {
+        background-color: #111;
+        color: #fff;
+    }
+}
+
+#main {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 100px 25px 100px 25px;
+    .note {
+        border: 1px solid #111;
+        margin: 5px;
+        width: 285px;
+        padding: 15px;
+        transition: .2s;
+        input.caption {
+            width: 100%;
+            outline: none;
+            border: 0;
+            margin-bottom: 2.5px;
+            padding: 5px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            border-radius: 2px;
+            transition: .2s;
+        }
+
+        textarea.content {
+            width: 100%;
+            min-height: 150px;
+            resize: none;
+            outline: none;
+            border: 0;
+            padding: 5px;
+            margin-top: 2.5px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            border-radius: 2px;
+            transition: .2s;
+        }
+        .datetime {
+            opacity: .45;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+    }
+    .remove {
+        outline: none;
+        border: 0;
+        color: #fff;
+        visibility: visible;
+        position: relative;
+        background: none;
+        font-size: 16px;
+        color: #111;
+        transition: .2s;
+        cursor: pointer;
+    }
+    .remove:hover {
+        color: #F95454;
+    }
+}
