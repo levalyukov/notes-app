@@ -8,7 +8,7 @@ function updateObjectCounter() {
 function noteCreate() {
     objectCounter++;
     
-    const main = document.getElementById("main");
+    const main = document.getElementById("container");
     const note = document.createElement("article");
     const note_caption = document.createElement("input");
     const note_hr = document.createElement("hr");
@@ -47,7 +47,7 @@ function noteCreate() {
 }
 
 function createNoteElement(noteID, captionValue, textareaValue) {
-    const main = document.getElementById("main");
+    const main = document.getElementById("container");
     const note = document.createElement("article");
     const noteCaption = document.createElement("input");
     const noteHr = document.createElement("hr");

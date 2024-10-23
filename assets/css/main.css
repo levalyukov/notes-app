@@ -21,40 +21,52 @@ body {
 
 .nav-menu {
     position: fixed;
-    padding: 15px 30px 15px 30px;
     display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 25px 25px 25px 30px;
     background-color: #fff;
     width: 100%;
     border-bottom: 1px solid #111;
     z-index: 1;
+
     .logo {
-        font-family: "Montserrat", sans-serif;
         font-weight: 900;
         font-size: 30px;
+        padding-right: 15px;
         color: #111;
-        padding-right: 25px;
         text-decoration: none;
     }
+
     button {
         outline: none;
         border: 0;
-        padding: 0px 12.5px;
-        font-size: 20px;
+        font-size: 24px;
+        padding: 0px 7px;
         border-radius: 50vh;
         transition: .2s;
         cursor: pointer;
     }
+
     button:hover {
         background-color: #b8b8b8;
     }
+
     button:active {
         background-color: #111;
         color: #fff;
     }
+
+    .content-right {
+        opacity: .75;
+        color: #111;
+        margin-left: auto;
+    }
 }
 
-#main {
+#container {
     display: flex;
+    align-content: center;
     flex-wrap: wrap;
     padding: 100px 25px 100px 25px;
     .note {
@@ -62,6 +74,7 @@ body {
         margin: 5px;
         width: 285px;
         padding: 15px;
+        border-radius: 2px;
         transition: .2s;
         input.caption {
             width: 100%;
@@ -88,10 +101,18 @@ body {
             border-radius: 2px;
             transition: .2s;
         }
-        .datetime {
-            opacity: .45;
-            margin-top: 5px;
-            font-size: 12px;
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #111;
+            background: repeating-linear-gradient(
+                100deg,
+                #111,
+                #111 6px,
+                transparent 6px,
+                transparent 12px
+                );
         }
     }
     .remove {
