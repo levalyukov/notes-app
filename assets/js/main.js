@@ -133,7 +133,7 @@ function saveNoteData(id) {
             content: captionTextArea.value,
         };
 
-        localStorage.setItem(noteData.id, JSON.stringify(noteData)); // Сохраняем по ID
+        localStorage.setItem(noteData.id, JSON.stringify(noteData));
     }
 }
 
