@@ -17,6 +17,7 @@
 
 body {
     background-color: #fff;
+    font-family: "Crimson Pro", serif;
 }
 
 .nav-menu {
@@ -24,36 +25,38 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 25px 25px 25px 30px;
+    padding: 25px 50px 25px 55px;
     background-color: #fff;
     width: 100%;
     border-bottom: 1px solid #111;
     z-index: 1;
 
     .logo {
-        font-weight: 900;
-        font-size: 30px;
-        padding-right: 15px;
         color: #111;
+        font-size: 38px;
+        font-weight: 900;
+        margin-right: 25px;
         text-decoration: none;
     }
 
     button {
         outline: none;
         border: 0;
-        font-size: 24px;
-        padding: 0px 7px;
+        font-size: 20px;
+        padding: 5px 8px;
         border-radius: 50vh;
         transition: .2s;
+        background-color: #99BC85;
+        color: #fff;
         cursor: pointer;
     }
 
     button:hover {
-        background-color: #b8b8b8;
+        background-color: #BFD8AF;
     }
 
     button:active {
-        background-color: #111;
+        background-color: #D4E7C5;
         color: #fff;
     }
 
@@ -65,39 +68,42 @@ body {
 }
 
 #container {
-    display: flex;
-    align-content: center;
+    display: flex; 
+    justify-content: center; 
     flex-wrap: wrap;
-    padding: 100px 25px 100px 25px;
+    width: 1250px;
+    padding: 100px 25px 50px 25px;
     .note {
         border: 1px solid #111;
         margin: 5px;
-        width: 285px;
+        width: 385px;
         padding: 15px;
         border-radius: 2px;
         transition: .2s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
         input.caption {
             width: 100%;
             outline: none;
             border: 0;
-            margin-bottom: 2.5px;
+            margin-bottom: 10px;
             padding: 5px;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 18px;
+            font-family: "Crimson Pro", serif;
+            font-size: 28px;
             border-radius: 2px;
             transition: .2s;
         }
 
         textarea.content {
             width: 100%;
-            min-height: 150px;
+            min-height: 225px;
             resize: none;
             outline: none;
             border: 0;
             padding: 5px;
-            margin-top: 2.5px;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 18px;
+            margin-top: 10px;
+            font-family: "Crimson Pro", serif;
+            font-size: 22px;
             border-radius: 2px;
             transition: .2s;
         }
@@ -126,8 +132,14 @@ body {
         color: #111;
         transition: .2s;
         cursor: pointer;
+        padding-bottom: 5px;
     }
     .remove:hover {
         color: #F95454;
     }
+}
+
+@keyframes animatetop {
+    from {opacity: 0}
+    to {opacity: 1}
 }

@@ -5,48 +5,46 @@ function updateObjectCounter() {
     objectCounter = notes.length > 0 ? Math.max(...Array.from(notes).map(note => parseInt(note.getAttribute('data-id').split('-')[1]))) : 0;
 }
 
-function noteCreate() {
+function createNoteElement() {
     objectCounter++;
     
     const main = document.getElementById("container");
     const note = document.createElement("article");
-    const note_caption = document.createElement("input");
-    const note_hr = document.createElement("hr");
-    const note_textarea = document.createElement("textarea");
-    const note_nav = document.createElement("nav");
-    const note_remove_button = document.createElement("button");
-    const note_trash_icon = document.createElement("i");
+    const noteCaption = document.createElement("input");
+    const noteHr = document.createElement("hr");
+    const noteTextArea = document.createElement("textarea");
+    const noteNav = document.createElement("nav");
+    const noteRemoveButton = document.createElement("button");
+    const noteTrashIcon = document.createElement("i");
     const uniqueId = 'note-' + objectCounter;
 
-    note.classList.add("note");
-    note.setAttribute('data-id', uniqueId);
-
-    note_caption.classList.add("caption");
-    note_caption.setAttribute("placeholder", "Caption...");
-    note.appendChild(note_caption);
-
-    note.appendChild(note_hr);
-
-    note_textarea.classList.add("content");
-    note_textarea.setAttribute("placeholder", "Content...");
-    note.appendChild(note_textarea);
-
-    note.appendChild(note_nav)
-    note_nav.appendChild(note_remove_button);
-    note_remove_button.setAttribute("id", "remove");
-    note_remove_button.classList.add("remove");
-    note_remove_button.appendChild(note_trash_icon);
-    note_remove_button.addEventListener('click', function() {
-        removeNoteElement(uniqueId);
-    });
-    note_trash_icon.classList.add("fa-solid", "fa-trash");
-    note_caption.addEventListener('input', () => saveNoteData(uniqueId));
-    note_textarea.addEventListener('input', () => saveNoteData(uniqueId));
+    note.appendChild(noteCaption);
+    note.appendChild(noteHr);
+    note.appendChild(noteTextArea);
+    note.appendChild(noteNav)
+    noteNav.appendChild(noteRemoveButton);
+    noteRemoveButton.appendChild(noteTrashIcon);
     main.appendChild(note);
+
+    note.classList.add("note");
+    noteCaption.classList.add("caption");
+    noteTextArea.classList.add("content");
+    noteRemoveButton.classList.add("remove");
+    noteTrashIcon.classList.add("fa-solid", "fa-trash");
+
+    note.setAttribute('data-id', uniqueId);
+    noteCaption.setAttribute("placeholder", "Title");
+    noteTextArea.setAttribute("placeholder", "Content...");
+    noteRemoveButton.setAttribute("id", "remove");
+    
+    noteRemoveButton.addEventListener('click', function() {removeNoteElement(uniqueId);});
+    noteCaption.addEventListener('input', () => saveNoteData(uniqueId));
+    noteTextArea.addEventListener('input', () => saveNoteData(uniqueId));
+    
     saveObjectsToLocalStorage();
 }
 
-function createNoteElement(noteID, captionValue, textareaValue) {
+function loadNoteElement(noteID, captionValue, textareaValue) {
     const main = document.getElementById("container");
     const note = document.createElement("article");
     const noteCaption = document.createElement("input");
@@ -60,7 +58,7 @@ function createNoteElement(noteID, captionValue, textareaValue) {
     note.setAttribute('data-id', noteID);
 
     noteCaption.classList.add('caption');
-    noteCaption.setAttribute("placeholder", "Caption...");
+    noteCaption.setAttribute("placeholder", "Title");
     noteCaption.value = captionValue;
 
     noteTextArea.classList.add('content');
@@ -116,7 +114,7 @@ function loadObjectsFromLocalStorage() {
         if (key.startsWith('note-')) {
             const noteData = JSON.parse(localStorage.getItem(key));
             if (noteData && noteData.id) {
-                createNoteElement(noteData.id, noteData.caption, noteData.content);
+                loadNoteElement(noteData.id, noteData.caption, noteData.content);
             }
         }
     }
@@ -141,5 +139,5 @@ function saveNoteData(id) {
 
 window.onload = function() {
     loadObjectsFromLocalStorage();
-    document.getElementById("create").addEventListener('click', noteCreate);
+    document.getElementById("create").addEventListener('click', createNoteElement);
 }
