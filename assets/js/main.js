@@ -54,35 +54,31 @@ function loadNoteElement(noteID, captionValue, textareaValue) {
     const noteRemoveButton = document.createElement("button");
     const noteTrashIcon = document.createElement("i");
 
-    note.classList.add('note');
-    note.setAttribute('data-id', noteID);
-
-    noteCaption.classList.add('caption');
-    noteCaption.setAttribute("placeholder", "Title");
-    noteCaption.value = captionValue;
-
-    noteTextArea.classList.add('content');
-    noteTextArea.setAttribute("placeholder", "Content...");
-    noteTextArea.value = textareaValue;
-
-    noteRemoveButton.setAttribute("id", "remove");
-    noteRemoveButton.classList.add("remove");
-    noteRemoveButton.appendChild(noteTrashIcon);
-    noteRemoveButton.addEventListener('click', function() {
-        removeNoteElement(noteID);
-    });
-
-    noteTrashIcon.classList.add("fa-solid", "fa-trash");
-
-    noteCaption.addEventListener('input', () => saveNoteData(noteID));
-    noteTextArea.addEventListener('input', () => saveNoteData(noteID));
-
     note.appendChild(noteCaption);
     note.appendChild(noteHr);
     note.appendChild(noteTextArea);
     note.appendChild(noteNav);
     noteNav.appendChild(noteRemoveButton);
+    noteRemoveButton.appendChild(noteTrashIcon);
     main.appendChild(note);
+
+    note.classList.add('note');
+    noteCaption.classList.add('caption');
+    noteTextArea.classList.add('content');
+    noteRemoveButton.classList.add("remove");
+    noteTrashIcon.classList.add("fa-solid", "fa-trash");
+
+    note.setAttribute('data-id', noteID);
+    noteCaption.setAttribute("placeholder", "Title");
+    noteTextArea.setAttribute("placeholder", "Content...");
+    noteRemoveButton.setAttribute("id", "remove");
+    
+    noteCaption.value = captionValue;
+    noteTextArea.value = textareaValue;
+
+    noteRemoveButton.addEventListener('click', function() {removeNoteElement(noteID);});
+    noteCaption.addEventListener('input', () => saveNoteData(noteID));
+    noteTextArea.addEventListener('input', () => saveNoteData(noteID));
 }
 
 function removeNoteElement(id) {
@@ -132,7 +128,6 @@ function saveNoteData(id) {
             caption: captionInput.value,
             content: captionTextArea.value,
         };
-
         localStorage.setItem(noteData.id, JSON.stringify(noteData));
     }
 }
