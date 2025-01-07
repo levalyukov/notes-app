@@ -16,17 +16,23 @@ function createNote() {
     content.classList.add('noteContent')
 
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Запишите свои мысли тут')
+    content.setAttribute('placeholder', 'Начните излагать свои мысли здесь')
 
     caption.value = ""
     content.value = ""
 
     caption.addEventListener('input', () => saveNoteLocalStorage(id))
     content.addEventListener('input', () => saveNoteLocalStorage(id))
+    const date = new Date()
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const seconds = String(date.getSeconds()).padStart(2, '0')
+    const lastChange = `${hours}:${minutes}:${seconds}`
     const noteData = {
         'id': id,
         'caption': caption.value,
         'content': content.value,
+        'lastChange': lastChange,
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     document.title = 'Pocket Notes: ' + 'Новая заметка #' + noteIDCount
@@ -47,7 +53,7 @@ function loadNote(index, header, description) {
     content.classList.add('noteContent')
 
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Запишите свои мысли тут')
+    content.setAttribute('placeholder', 'Начните излагать свои мысли здесь')
 
     caption.value = header
     content.value = description
@@ -68,20 +74,30 @@ function loadNote(index, header, description) {
 function saveNoteLocalStorage(id) {
     const noteCaption = document.querySelector('.noteCaption')
     const noteContent = document.querySelector('.noteContent')
+    const date = new Date()
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const seconds = String(date.getSeconds()).padStart(2, '0')
+    const lastChange = `${hours}:${minutes}:${seconds}`
     const noteData = {
         'id': id,
         'caption': noteCaption.value,
-        'content': noteContent.value ,
+        'content': noteContent.value,
+        'lastChange': lastChange,
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     const slideMenu = document.querySelector('aside')
-    if (noteCaption.value.length > 14) {
-        document.title = 'Pocket Notes: ' + noteCaption.value.substring(0,14) + '...'
+    if (noteCaption.value.length > 0) {
+        if (noteCaption.value.length > 14) {
+            document.title = 'Pocket Notes: ' + noteCaption.value.substring(0,14) + '...'
+        } else {
+            document.title = 'Pocket Notes: ' + noteCaption.value
+        } 
     } else {
-        document.title = 'Pocket Notes: ' + noteCaption.value
-    } if (slideMenu) {
-        updateNotesTab()
+        document.title = 'Pocket Notes: ' + 'Новая заметка #' + id.substring(5)
     }
+
+    if (slideMenu) {updateNotesTab()}
 }
 
 function loadNoteContent(id, caption, content) {
@@ -127,6 +143,7 @@ function hashClear() {
     )
     document.title = 'Pocket Notes'
     updateNotesTab()
+    openHomePage()
     const containers = document.querySelectorAll('.note-content');
     if (containers.length > 0) {
         containers.forEach((element) => {

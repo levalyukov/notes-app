@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -56,8 +57,15 @@ aside {
             height: 100px;
             object-fit: contain;
             margin-top: 25px;
+            cursor: pointer;
+            transition: .25s;
+            opacity: .85;
+        } img:hover {
+            transform: translateY(-5px);
+            opacity: 1;
         }
         h1 {
+            font-family: "Nunito", serif;
             text-align: center;
             margin-top: 25px;
             font-size: 28px;
@@ -107,9 +115,7 @@ aside {
         } a:hover button.remove_note {
             visibility: visible;
             opacity: 1;
-        }
-
-        p.author {
+        } p.author {
             padding: 15px;
             opacity: 0.75;
         }
@@ -122,10 +128,12 @@ aside {
 /* Main */
 main.app {
     display: flex;
+    overflow-y: scroll;
+    height: 100vh;
     section#note {
         margin: 25px;
         width: 100%;
-        height: 100vh;
+        min-height: 50vh;
         overflow-y: scroll;
         img {
             height: 225px;
@@ -143,29 +151,33 @@ main.app {
                 font-size: 75px;
             }
             input {
+                font-family: "Nunito", serif;
                 font-size: 36px;
-                font-weight: bold;
-                padding: 75px 0px 25px 0px;
-                outline: none;
-                border: 0;
+                margin: 75px 5px 15px 5px;
                 color: #1e272e;
+                font-weight: bold;
+                border: 0;
+                outline: 0;
             }
             textarea {
                 white-space: break-spaces;
-                font-size: 18px;
                 padding-bottom: 25px;
                 outline: none;
                 resize: none;
                 height: 100vh;
-                margin-top: 5px;
                 border: 0;
                 color: #1e272e;
+                font-size: 20px;
+                margin: 0px 5px 10px 5px;
+                font-weight: normal;
             } input::placeholder, textarea::placeholder {
                 color: #1e272e;
                 opacity: .50;
             }
         }
-    }
+    } section#note::-webkit-scrollbar {display:none}
+} main.app::-webkit-scrollbar {
+    display: none;
 }
 
 /* Modals */
@@ -210,6 +222,7 @@ modals {
                 h1 {
                     color: #1e272e;
                     margin-bottom: 25px;
+                    font-family: "Nunito", serif;
                 }
             }
             section {
@@ -334,7 +347,7 @@ modals {
         }
         modal {
             border-radius: 10px;
-            width: 75vw;
+            width: 55vw;
             max-height: 750px;
             overflow-y: auto;
             position: absolute;
@@ -358,6 +371,7 @@ modals {
                     cursor: pointer;
                 }
                 h1 {
+                    font-family: "Nunito", serif;
                     text-transform: capitalize;
                     color: #1e272e;
                     margin-bottom: 25px;
@@ -371,11 +385,12 @@ modals {
                     color: #1e272e;
                 }
                 h3 {
+                    font-family: "Nunito", serif;
                     font-size: 22px;
-                    margin: 25px 0 15px 0;
+                    margin: 25px 0 5px 0;
                     color: #1e272e;
                 } h3:nth-child(2) {
-                    margin: 0 0 15px 0;
+                    margin: 0 0 5px 0;
                 }
             }
         }
@@ -406,6 +421,8 @@ notifications {
                 font-size: 18px;
             }
             p {
+                max-width: 400px;
+                white-space: break-spaces;
                 a {
                     color: #70a1ff;
                     text-decoration: none;
@@ -431,7 +448,7 @@ notifications {
             background: none;
             outline: 0;
             border: 0;
-            margin: 0 15px 0px 25px;
+            margin: 0 15px 0px 15px;
             span {
                 display: flex;
                 align-items: center;
@@ -446,6 +463,57 @@ notifications {
             }
         } button:hover span {
             background-color: #fff;
+        }
+    }
+}
+
+homepage {
+    animation-name: contentLoad;
+    animation-duration: .15s;
+    h1 {
+        font-family: "Nunito", serif;
+        font-size: 36px;
+        margin: 75px 5px 15px 5px;
+        color: #1e272e;
+        font-weight: bold;
+    } h2 {
+        font-family: "Nunito", serif;
+        font-size: 20px;
+        margin: 0px 5px 10px 5px;
+        color: #a4b0be;
+        font-weight: normal;
+    } container {
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        article {
+            cursor: pointer;
+            background-color: #f1f2f6;
+            width: 400px;
+            margin: 5px;
+            padding: 25px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            transition: .25s;
+            h3 {
+                font-family: "Nunito", serif;
+                margin: 5px 0px;
+                font-size: 24px;
+            } p {
+                font-size: 18px;
+                margin: 5px 0px;
+                height: 100px;
+                padding: 5px 0;
+                opacity: .5;
+            } datetime {
+                margin: 5px 0px;
+                align-self: end;
+                opacity: .5;
+            }
+        } article:hover {
+            transform: translateY(-5px);
+            box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
         }
     }
 }

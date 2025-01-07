@@ -13,11 +13,11 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.1'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.2'],
             'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
             'token': ['fa-solid', 'fa-solid', 'fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
-            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.1']
+            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.2']
         },
         'author': '© Lev Alyukov'
     }
@@ -54,6 +54,14 @@ function slideMenu(
                 const img = document.createElement('img')
                 header.appendChild(img)
                 img.setAttribute('src', header_content['logo-url'])
+                img.addEventListener('click', () => {
+                    if (screen.width > 750) {
+                        openHomePage()
+                    } else {
+                        openHomePage()
+                        slideMenu()
+                    }
+                })
             } if ('header' in header_content) {
                 const h1 = document.createElement('h1')
                 header.appendChild(h1)
@@ -86,6 +94,7 @@ function slideMenu(
                         const containers = document.querySelectorAll('.note-content')
                         if (containers.length === 0) {
                             createNote()
+                            closeHomePage()
                         } else {
                             containers.forEach((element) => {
                                 element.style.animationName = "contentRemove"
@@ -93,9 +102,13 @@ function slideMenu(
                                     element.remove()
                                 })
                             })
+                            closeHomePage()
                             createNote()
                         }
                         updateNotesTab()
+                        if (screen.width < 750) {
+                            slideMenu()
+                        }
                     })
                 }
             }
@@ -238,9 +251,11 @@ function updateNotesTab() {
                     element.remove()
                 })
             })
+            openHomePage()
         })
         noteTab.addEventListener('click', () => {
             loadNoteContent(noteData.id, noteData.caption, noteData.content)
+            closeHomePage()
             if (screen.width < 750) {
                 slideMenu()
             }

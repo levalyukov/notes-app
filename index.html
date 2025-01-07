@@ -20,12 +20,18 @@
                 const menuButton = document.getElementById('menu')
                 menuButton.addEventListener('click', () => slideMenu())
                 noteIDCount = localStorage.length
-                slideMenu()
+                if (screen.width > 750) {
+                    slideMenu()
+                }
+                openHomePage()
+                AppSettings()
             }
         </script>
+        <script src="assets/core/settings.js"></script>
         <script src="assets/core/menu.js"></script>
         <script src="assets/core/modal.js"></script>
         <script src="assets/core/notes.js"></script>
+        <script src="assets/core/homepage.js"></script>
         <script src="assets/core/notifications.js"></script>
         <script src="https://kit.fontawesome.com/9aaf1c70ab.js" crossorigin="anonymous"></script>
     </body>
