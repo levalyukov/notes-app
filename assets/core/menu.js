@@ -1,6 +1,6 @@
 function slideMenu(
     header_content = {
-        'logo-url': '../logo.png',
+        'logo-url': 'https://levalyukov.github.io/notes-app/assets/logo.png',
         'header': 'Pocket Notes',
     },
     main_content = {
