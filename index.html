@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/css.css">
+        <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+        <title>Pocket Note</title>
+    </head>
+
+    <body>
+        <notifications></notifications>
+        <modals></modals>
+        <buttonContainer><button id="menu"><i class="fa-solid fa-bars"></i></button></buttonContainer>
+        <main class="app"><menu_container></menu_container><section id="note"></section></main>
+            
+        <!-- core -->
+        <script>
+            window.onload = function() {
+                const menuButton = document.getElementById('menu')
+                menuButton.addEventListener('click', () => slideMenu())
+                noteIDCount = localStorage.length
+                slideMenu()
+            }
+        </script>
+        <script src="assets/core/menu.js"></script>
+        <script src="assets/core/modal.js"></script>
+        <script src="assets/core/notes.js"></script>
+        <script src="assets/core/notifications.js"></script>
+        <script src="https://kit.fontawesome.com/9aaf1c70ab.js" crossorigin="anonymous"></script>
+    </body>
+</html>
