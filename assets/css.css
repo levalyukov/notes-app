@@ -33,6 +33,7 @@ button#menu {
     cursor: pointer;
     z-index: 2;
     transition: .25s;
+    color: #1e272e;
 } button#menu:hover {
     background-color: #f1f2f6;
 } button#menu:active {
