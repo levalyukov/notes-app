@@ -1,6 +1,6 @@
 function slideMenu(
     header_content = {
-        'logo-url': '../assets/logo.png',
+        'logo-url': '../logo.png',
         'header': 'Pocket Notes',
     },
     main_content = {
