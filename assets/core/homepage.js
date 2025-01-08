@@ -35,9 +35,6 @@ function openHomePage() {
             }
         }
         if (localStorage.length > 0) {
-            subtitle.innerHTML = "Последние изменения:"
-            const articleContainer = document.createElement('container')
-            homepage.appendChild(articleContainer)
             const notes = []
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i)
@@ -48,48 +45,53 @@ function openHomePage() {
                     }
                 }
             }
-            notes.sort((a, b) => {
-                return b.lastChange.localeCompare(a.lastChange)
-            })
-            notes.forEach((noteData) => {
-                const articles = document.querySelectorAll('article')
-                if (articles.length < 3) {
-                    const article = document.createElement('article')
-                    articleContainer.appendChild(article)
-                    const caption = document.createElement('h3')
-                    const content = document.createElement('p')
-                    const datetime = document.createElement('datetime')
-                    article.appendChild(caption)
-                    article.appendChild(content)
-                    article.appendChild(datetime)
-                    if (noteData.caption == '') {
-                        caption.innerHTML = 'Новая заметка #' + noteData.id.substring(5)
-                    } else {
-                        if (noteData.caption.length > 22) {
-                            caption.innerHTML = noteData.caption.substring(0, 22) + "..."
+            if (notes.length > 0) {
+                subtitle.innerHTML = "Последние изменения:"
+                const articleContainer = document.createElement('container')
+                homepage.appendChild(articleContainer)
+                notes.sort((a, b) => {
+                    return b.lastChange.localeCompare(a.lastChange)
+                })
+                notes.forEach((noteData) => {
+                    const articles = document.querySelectorAll('article')
+                    if (articles.length < 3) {
+                        const article = document.createElement('article')
+                        articleContainer.appendChild(article)
+                        const caption = document.createElement('h3')
+                        const content = document.createElement('p')
+                        const datetime = document.createElement('datetime')
+                        article.appendChild(caption)
+                        article.appendChild(content)
+                        article.appendChild(datetime)
+                        if (noteData.caption == '') {
+                            caption.innerHTML = 'Новая заметка #' + noteData.id.substring(5)
                         } else {
-                            caption.innerHTML = noteData.caption
-                        }
-                    } if (noteData.content == '') {
-                        content.innerHTML = 'Заметка пустая'
-                    } else {
-                        if (noteData.content.length > 160) {
-                            content.innerHTML = noteData.content.substring(0, 160) + "..."
+                            if (noteData.caption.length > 22) {
+                                caption.innerHTML = noteData.caption.substring(0, 22) + "..."
+                            } else {
+                                caption.innerHTML = noteData.caption
+                            }
+                        } if (noteData.content == '') {
+                            content.innerHTML = 'Заметка пустая'
                         } else {
-                            content.innerHTML = noteData.content
-                        }
-                    } if (noteData.lastChange != undefined) {
-                        datetime.innerHTML = noteData.lastChange.substring(0,5)
-                    }  
-    
-                    article.addEventListener('click', () => {
-                        loadNoteContent(noteData.id, noteData.caption, noteData.content)
-                        closeHomePage()
-                    })
-                }
-            })
-        } else {
-            subtitle.innerHTML = "Пока заметок нет, но их легко можно создать в меню."
+                            if (noteData.content.length > 160) {
+                                content.innerHTML = noteData.content.substring(0, 160) + "..."
+                            } else {
+                                content.innerHTML = noteData.content
+                            }
+                        } if (noteData.lastChange != undefined) {
+                            datetime.innerHTML = noteData.lastChange.substring(0,5)
+                        }  
+        
+                        article.addEventListener('click', () => {
+                            loadNoteContent(noteData.id, noteData.caption, noteData.content)
+                            closeHomePage()
+                        })
+                    }
+                })
+            } else {
+                subtitle.innerHTML = "Пока заметок нет, но их легко создать в меню."
+            }
         }
     }
 }
