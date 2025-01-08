@@ -16,7 +16,7 @@ function createNote() {
     content.classList.add('noteContent')
 
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Начните излагать свои мысли здесь')
+    content.setAttribute('placeholder', 'Начните излагать свои мысли')
 
     caption.value = ""
     content.value = ""
@@ -53,7 +53,7 @@ function loadNote(index, header, description) {
     content.classList.add('noteContent')
 
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Начните излагать свои мысли здесь')
+    content.setAttribute('placeholder', 'Начните излагать свои мысли')
 
     caption.value = header
     content.value = description
@@ -124,7 +124,10 @@ function removeNoteLocalStorage(id) {
     })
     noteIDCount = 0
     for (let i = 0; i < localStorage.length; i++) {
-        noteIDCount+=1
+        const key = localStorage.key(i)
+        if (key.startsWith('note-')) {
+            noteIDCount+=1
+        }
     }
     updateNotesTab()
 }
@@ -142,6 +145,7 @@ function hashClear() {
         }
     )
     document.title = 'Pocket Notes'
+    AppSettings()
     updateNotesTab()
     openHomePage()
     const containers = document.querySelectorAll('.note-content');
