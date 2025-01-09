@@ -74,8 +74,8 @@ function openHomePage(maxNotes = 6) {
                         } if (noteData.content == '') {
                             content.innerHTML = 'Заметка пустая'
                         } else {
-                            if (noteData.content.length > 160) {
-                                content.innerHTML = noteData.content.substring(0, 160) + "..."
+                            if (noteData.content.length > 125) {
+                                content.innerHTML = noteData.content.substring(0, 125) + "..."
                             } else {
                                 content.innerHTML = noteData.content
                             }
