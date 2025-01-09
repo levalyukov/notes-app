@@ -467,7 +467,7 @@ modals {
                 p {
                     white-space: break-spaces;
                     font-size: 18px;
-                    color: var(--secondary-text);
+                    color: var(--main-text);
                 }
                 h3 {
                     font-family: "Nunito", serif;
