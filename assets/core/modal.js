@@ -1,20 +1,22 @@
 function openAppSettings(
-    captions = ['Тема', 'Язык', 'Очистить кэш'], 
+    captions = ['Тема', 'Язык', 'Удалить данные'], 
     icons = ['fa-palette', 'fa-globe', 'fa-trash-can'], 
     contents = {
         'theme': {
             'type': 'select',
-            'value': ['light'],
-            'caption': ['Светлая'],
+            'name': 'theme',
+            'value': ['light', 'dark'],
+            'caption': ['Светлая', 'Тёмная'],
             },
         'language': {
             'type': 'select',
+            'name': 'language',
             'value': ['ru-ru'],
             'caption': ['Русский'],
             },
         'clear-hash': {
             'type': 'button',
-            'caption': ['Очистить'],
+            'caption': ['Удалить'],
             'danger': true,
             },
         }
@@ -44,6 +46,7 @@ function openAppSettings(
         let content_captions = []
         let content_values = []
         let content_type = []
+        let content_name = []
         if (contents != {}) {
             for (let i in contents) {
                 if ('type' in contents[i]) {
@@ -52,6 +55,8 @@ function openAppSettings(
                     content_values.push(contents[i]["value"])
                 } if ('caption' in contents[i]) {
                     content_captions.push(contents[i]["caption"])
+                } if ('name' in contents[i]) {
+                    content_name.push(contents[i]["name"])
                 }
             }
         }
@@ -74,6 +79,7 @@ function openAppSettings(
                     const select = document.createElement('select')
                     component.appendChild(form)
                     form.appendChild(select)
+                    select.setAttribute('id', content_name[i])
                     for (let m = 0; m < content_values[i].length; m++) {
                         const option = document.createElement('option')
                         select.appendChild(option)
@@ -81,6 +87,13 @@ function openAppSettings(
                             option.innerHTML += content_captions[i][m]
                         } if (content_values[i][m] !== undefined && content_values[i][m] !== '') {
                             option.setAttribute('value', content_values[i][m])
+                        }
+                        const key = localStorage.key('settings')
+                        const data = JSON.parse(localStorage.getItem(key))
+                        if (select.getAttribute('id') == "theme") {
+                            select.value = data.theme
+                        } if (select.getAttribute('id') == "language") {
+                            select.value = data.language
                         }
                     }
                 } if (content_type[i] == "button") {
@@ -93,7 +106,7 @@ function openAppSettings(
                         }
                     }
                     button.addEventListener('click', () => {
-                        button_captions = ['Отмена', 'Очистить']
+                        button_captions = ['Отмена', 'Удалить']
                         button_classes = ['cancel', 'apply']
                         if (!button.getAttribute('clicked')) {
                             button.setAttribute('clicked', true)
@@ -103,6 +116,8 @@ function openAppSettings(
                                 modal.appendChild(footer)
                                 section.appendChild(importantInfo)
                                 importantInfo.innerText = "Внимание! Очистка кэша приведет к удалению всех заметок."
+                                importantInfo.appendChild(footer)
+                                importantInfo.setAttribute('id', 'danger')
                                 for (let i = 0; i < button_captions.length; i++) {
                                     if (button_captions[i] !== undefined) {
                                         const button_function = document.createElement('button')
@@ -113,10 +128,13 @@ function openAppSettings(
                                             button_function.classList.add(button_classes[i])
                                         } if (button_function.classList.contains('apply')) {
                                             button_function.addEventListener('click', () => {
-                                                footer.remove()
-                                                importantInfo.remove()
                                                 button.removeAttribute('clicked')
                                                 hashClear()
+                                                modal.style.animationName = "modalClose"
+                                                background.style.animationName = "modalClose-background"
+                                                background.addEventListener('animationend', () => {
+                                                    background.remove()
+                                                })
                                             })
                                         } if (button_function.classList.contains('cancel')) {
                                             button_function.addEventListener('click', () => {
@@ -134,6 +152,34 @@ function openAppSettings(
             }
             paragraph.innerHTML += ' ' + captions[i]
         }
+        const themeSelect = document.getElementById('theme')
+        const languageSelect = document.getElementById('language')
+        const saveSettingsButton = document.createElement('button')
+        const footer = document.createElement('footer')
+
+        modal.appendChild(footer)
+        footer.setAttribute('id', 'saveSettingsFooter')
+        footer.appendChild(saveSettingsButton)
+        saveSettingsButton.setAttribute('id', 'saveSettingsButton')
+        saveSettingsButton.innerHTML = 'Сохранить'
+        saveSettingsButton.addEventListener('click', () => {
+            notice(
+                'Успешно!',
+                'Настройки сохранены.',
+                {
+                    'color-light': '#7bed9f',
+                    'color-dark': '#2ed573',
+                    'icon': 'fa-check-double',
+                }
+            )
+            saveSettings(themeSelect.value, languageSelect.value)
+            loadSettings()
+            modal.style.animationName = "modalClose"
+            background.style.animationName = "modalClose-background"
+            background.addEventListener('animationend', () => {
+                background.remove()
+            })
+        })
     }
 
     button.addEventListener('click', () => {
@@ -169,7 +215,6 @@ function openPrivacyPolicy(
     background.appendChild(modal)
     modal.appendChild(header)
     modal.appendChild(section)
-    
     header.appendChild(button)
     button.appendChild(buttonCloseIcon)
     header.appendChild(h1)

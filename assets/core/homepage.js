@@ -1,4 +1,4 @@
-function openHomePage() {
+function openHomePage(maxNotes = 6) {
     document.title = 'Pocket Notes'
     const homepageContainer = document.querySelectorAll('homepage')
     if (homepageContainer.length > 0) {
@@ -54,7 +54,7 @@ function openHomePage() {
                 })
                 notes.forEach((noteData) => {
                     const articles = document.querySelectorAll('article')
-                    if (articles.length < 3) {
+                    if (articles.length < maxNotes) {
                         const article = document.createElement('article')
                         articleContainer.appendChild(article)
                         const caption = document.createElement('h3')

@@ -1,5 +1,4 @@
 let noteIDCount = 0
-
 function createNote() {
     noteIDCount++
     const main = document.getElementById('note')
@@ -36,6 +35,7 @@ function createNote() {
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     document.title = 'Pocket Notes: ' + 'Новая заметка #' + noteIDCount
+    console.log(noteIDCount)
 }
 
 function loadNote(index, header, description) {
@@ -145,7 +145,7 @@ function hashClear() {
         }
     )
     document.title = 'Pocket Notes'
-    AppSettings()
+    getSettings()
     updateNotesTab()
     openHomePage()
     const containers = document.querySelectorAll('.note-content');

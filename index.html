@@ -19,12 +19,17 @@
             window.onload = function() {
                 const menuButton = document.getElementById('menu')
                 menuButton.addEventListener('click', () => slideMenu())
-                noteIDCount = localStorage.length
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i)
+                    if (key.startsWith('note-')) {
+                        noteIDCount+=1
+                    }
+                }
                 if (screen.width > 750) {
                     slideMenu()
                 }
                 openHomePage()
-                AppSettings()
+                getSettings()
             }
         </script>
         <script src="assets/core/settings.js"></script>
