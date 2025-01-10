@@ -88,7 +88,7 @@ function openAppSettings(
                         } if (content_values[i][m] !== undefined && content_values[i][m] !== '') {
                             option.setAttribute('value', content_values[i][m])
                         }
-                        const key = localStorage.key('settings')
+                        const key = localStorage.key('.settings')
                         const data = JSON.parse(localStorage.getItem(key))
                         if (select.getAttribute('id') == "theme") {
                             select.value = data.theme
@@ -156,6 +156,13 @@ function openAppSettings(
         const languageSelect = document.getElementById('language')
         const saveSettingsButton = document.createElement('button')
         const footer = document.createElement('footer')
+
+        const data = JSON.parse(localStorage.getItem('.settings'))
+        if ('theme' in data) {
+            themeSelect.value = data.theme
+        } if ('language' in data) {
+            languageSelect.value = data.language
+        }
 
         modal.appendChild(footer)
         footer.setAttribute('id', 'saveSettingsFooter')

@@ -482,6 +482,7 @@ modals {
     }
 
 notifications {
+    pointer-events: none;
     position: absolute;
     right: 0;
     padding: 25px 50px;
@@ -490,6 +491,7 @@ notifications {
     align-items: end;
     flex-direction: column;
     notice {
+        pointer-events: all;
         margin: 5px 0;
         display: flex;
         align-items: center;
@@ -500,6 +502,7 @@ notifications {
         border-radius: 10px;
         max-width: 550px;
         content {
+            justify-self: center;
             color: #1e272e;
             h1 {
                 font-size: 18px;
@@ -580,6 +583,7 @@ homepage {
             display: flex;
             flex-direction: column;
             transition: .25s;
+            word-wrap: break-word;
             h3 {
                 font-family: "Nunito", serif;
                 margin: 5px 0px;
@@ -611,12 +615,26 @@ homepage {
     } modals {
         background {
             modal_settings {
-                width: 100vw;
+                width: 100%;
                 border-radius: 0;
             }
             modal {
                 width: 100vw;
                 border-radius: 0;
+            }
+        }
+    } notifications {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        width: 100%;
+        notice {
+            animation-name: noticeCreateMobile;
+            display: flex;
+            width: 100%;
+            button {
+                margin-left: auto;
             }
         }
     }
@@ -675,13 +693,34 @@ homepage {
 
 @keyframes noticeRemove {
     from {
-        transform: translateY(0px);
+        transform: translateX(0px);
         opacity: 1;
     } to {
         transform: translateX(25px);
         opacity: 0;
     }
 }
+
+@keyframes noticeCreateMobile {
+    from {
+        transform: translateY(-25px);
+        opacity: 0;
+    } to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes noticeRemoveMobile {
+    from {
+        transform: translateX(0px);
+        opacity: 1;
+    } to {
+        transform: translateY(-25px);
+        opacity: 0;
+    }
+}
+
 
 @keyframes menuOpen {
     from {

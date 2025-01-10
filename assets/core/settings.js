@@ -1,9 +1,18 @@
 function getSettings() {
-    if (localStorage.getItem('settings')) {
-        loadSettings()
+    if (!localStorage.getItem('settings')) {
+        if (localStorage.getItem('.settings')) {
+            loadSettings()
+        } else {
+            saveSettings('light', 'ru-ru')
+            getSettings()
+        }
     } else {
-        saveSettings('light', 'ru-ru')
+        localStorage.removeItem('settings')
         getSettings()
+        notice(
+            'Система',
+            "'settings' → '.settings'.\nНастройки были сброшены."
+        )
     }
 }
 
@@ -12,13 +21,17 @@ function saveSettings(theme, language) {
         'theme': theme,
         'language': language,
     }
-    localStorage.setItem('settings', JSON.stringify(appData))
+    localStorage.setItem('.settings', JSON.stringify(appData))
 }
 
 function loadSettings() {
-    const key = localStorage.key('settings')
+    const key = localStorage.key('.settings')
     const appData = JSON.parse(localStorage.getItem(key))
     if ('theme' in appData) {
-        document.documentElement.setAttribute('theme', appData.theme)
+        applyTheme(appData.theme)
     }
+}
+
+function applyTheme(id) {
+    document.documentElement.setAttribute('theme', id)
 }

@@ -35,7 +35,6 @@ function createNote() {
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     document.title = 'Pocket Notes: ' + 'Новая заметка #' + noteIDCount
-    console.log(noteIDCount)
 }
 
 function loadNote(index, header, description) {

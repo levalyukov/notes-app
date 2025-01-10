@@ -1,6 +1,6 @@
 function notice(
-    header = "Notice header", 
-    description = "Hello, World!", 
+    header = "Система", 
+    description = "Оповещение", 
     style = {
         'color-light': '#f1f2f6',
         'color-dark': '#57606f',
@@ -51,14 +51,22 @@ function notice(
 
         buttonIcon.classList.add('fa-solid', 'fa-xmark')
         button.addEventListener('click', () => {
-            notice.style.animationName = "noticeRemove"
+            if (screen.width > 750) {
+                notice.style.animationName = "noticeRemove"
+            } else {
+                notice.style.animationName = "noticeRemoveMobile"
+            }
             notice.addEventListener('animationend', () => {
                 notice.remove()
             })
         })
 
         setTimeout(() => {
-            notice.style.animationName = "noticeRemove"
+            if (screen.width > 750) {
+                notice.style.animationName = "noticeRemove"
+            } else {
+                notice.style.animationName = "noticeRemoveMobile"
+            }
             notice.addEventListener('animationend', () => {
                 notice.remove()
             })
