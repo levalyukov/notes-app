@@ -13,7 +13,7 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.3.2'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.3.3'],
             'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
             'token': ['fa-solid', 'fa-solid', 'fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
