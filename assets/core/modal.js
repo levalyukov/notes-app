@@ -115,7 +115,7 @@ function openAppSettings(
                                 const importantInfo = document.createElement('p')
                                 modal.appendChild(footer)
                                 section.appendChild(importantInfo)
-                                importantInfo.innerText = "Внимание! Очистка кэша приведет к удалению всех заметок."
+                                importantInfo.innerText = "Внимание! Очистка кэша приведет к удалению всех данных."
                                 importantInfo.appendChild(footer)
                                 importantInfo.setAttribute('id', 'danger')
                                 for (let i = 0; i < button_captions.length; i++) {

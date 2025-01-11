@@ -1,18 +1,9 @@
 function getSettings() {
-    if (!localStorage.getItem('settings')) {
-        if (localStorage.getItem('.settings')) {
-            loadSettings()
-        } else {
-            saveSettings('light', 'ru-ru')
-            getSettings()
-        }
-    } else {
-        localStorage.removeItem('settings')
-        getSettings()
-        notice(
-            'Система',
-            "'settings' → '.settings'.\nНастройки были сброшены."
-        )
+    if (!localStorage.getItem('.settings')) {
+        saveSettings('light', 'ru-ru')
+    } if (localStorage.key('settings')) {
+        localStorage.removeItem('settings');
+        saveSettings('light', 'ru-ru')
     }
 }
 
@@ -25,13 +16,12 @@ function saveSettings(theme, language) {
 }
 
 function loadSettings() {
-    const key = localStorage.key('.settings')
-    const appData = JSON.parse(localStorage.getItem(key))
+    const appData = JSON.parse(localStorage.getItem('.settings'))
     if ('theme' in appData) {
         applyTheme(appData.theme)
     }
 }
 
-function applyTheme(id) {
-    document.documentElement.setAttribute('theme', id)
+function applyTheme(theme) {
+    document.documentElement.setAttribute('theme', theme)
 }

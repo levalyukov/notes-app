@@ -1,4 +1,4 @@
-function openHomePage(maxNotes = 6) {
+function openHomePage(maxNotes = 3) {
     document.title = 'Pocket Notes'
     const homepageContainer = document.querySelectorAll('homepage')
     if (homepageContainer.length > 0) {
