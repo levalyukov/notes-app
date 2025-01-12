@@ -1,4 +1,4 @@
-function openHomePage(maxNotes = 3) {
+function openHomePage(maxNotes = 6) {
     document.title = 'Pocket Notes'
     const homepageContainer = document.querySelectorAll('homepage')
     if (homepageContainer.length > 0) {
@@ -50,7 +50,9 @@ function openHomePage(maxNotes = 3) {
                 const articleContainer = document.createElement('container')
                 homepage.appendChild(articleContainer)
                 notes.sort((a, b) => {
-                    return b.lastChange.localeCompare(a.lastChange)
+                    if (a.pinned === "true" && b.pinned !== "true") return -1;
+                    if (a.pinned !== "true" && b.pinned === "true") return 1;
+                    return b.lastChange.localeCompare(a.lastChange);
                 })
                 notes.forEach((noteData) => {
                     const articles = document.querySelectorAll('article')
@@ -59,10 +61,14 @@ function openHomePage(maxNotes = 3) {
                         articleContainer.appendChild(article)
                         const caption = document.createElement('h3')
                         const content = document.createElement('p')
+                        const footer = document.createElement('footer')
                         const datetime = document.createElement('datetime')
+                        const pins = document.createElement('pins')
                         article.appendChild(caption)
                         article.appendChild(content)
-                        article.appendChild(datetime)
+                        article.appendChild(footer)
+                        footer.appendChild(pins)
+                        footer.appendChild(datetime)
                         if (noteData.caption == '') {
                             caption.innerHTML = 'Новая заметка #' + noteData.id.substring(5)
                         } else {
@@ -81,10 +87,18 @@ function openHomePage(maxNotes = 3) {
                             }
                         } if (noteData.lastChange != undefined) {
                             datetime.innerHTML = noteData.lastChange.substring(0,5)
-                        }  
+                        } if (noteData.pinned != undefined) {
+                            if (noteData.pinned == 'true') {
+                                const noteIcon = document.createElement('i')
+                                const noteIconContainer = document.createElement('span')
+                                pins.appendChild(noteIconContainer)
+                                noteIconContainer.appendChild(noteIcon)
+                                noteIcon.classList.add('fa-solid','fa-thumbtack')
+                            }
+                        }
         
                         article.addEventListener('click', () => {
-                            loadNoteContent(noteData.id, noteData.caption, noteData.content)
+                            loadNoteContent(noteData.id, noteData.caption, noteData.content, noteData.pinned)
                             closeHomePage()
                         })
                     }

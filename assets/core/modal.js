@@ -171,13 +171,8 @@ function openAppSettings(
         saveSettingsButton.innerHTML = 'Сохранить'
         saveSettingsButton.addEventListener('click', () => {
             notice(
-                'Успешно!',
-                'Настройки сохранены.',
-                {
-                    'color-light': '#7bed9f',
-                    'color-dark': '#2ed573',
-                    'icon': 'fa-check-double',
-                }
+                'Система',
+                'Настройки сохранены.'
             )
             saveSettings(themeSelect.value, languageSelect.value)
             loadSettings()

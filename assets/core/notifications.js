@@ -2,8 +2,6 @@ function notice(
     header = "Система", 
     description = "Оповещение", 
     style = {
-        'color-light': '#f1f2f6',
-        'color-dark': '#57606f',
         'icon': 'fa-info',
     }
 ) {
@@ -28,7 +26,7 @@ function notice(
     button.appendChild(buttonIconContainer)
     buttonIconContainer.appendChild(buttonIcon)
     span.classList.add('icon')
-    if (header != '' && description != '') {
+    if (header != '') {
         caption.innerHTML = header
         descript.innerHTML = description
         if (style != {}) {

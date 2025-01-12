@@ -1,9 +1,13 @@
 function getSettings() {
-    if (!localStorage.getItem('.settings')) {
+    if (localStorage.getItem('.settings')) {
+        loadSettings()
+    } if (!localStorage.getItem('.settings')) {
         saveSettings('light', 'ru-ru')
-    } if (localStorage.key('settings')) {
+        getSettings()
+    } if (localStorage.getItem('settings')) {
         localStorage.removeItem('settings');
         saveSettings('light', 'ru-ru')
+        getSettings()
     }
 }
 

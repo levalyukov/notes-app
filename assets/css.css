@@ -3,12 +3,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 /* Pallete */
 :root {
     /* background */
     --background: #ffffff;
     --secondary: #f1f2f6;
-    --shadow:rgba(0, 0, 0, 0.25);
+    --shadow: rgba(0, 0, 0, 0.25);
+    --box-shadow:rgba(0, 0, 0, 0.04) 0px 3px 5px;;
     --hover: #e6eaef;
         /* Text */
         --main-text: #1e272e;
@@ -197,6 +202,100 @@ main.app {
             flex-direction: column;
             animation-name: contentLoad;
             animation-duration: .15s;
+            nav.note-manipulation {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                button#noteManipulationButton {
+                    margin: 0px 15px;
+                    float: right;
+                    height: 50px;
+                    width: 50px;
+                    background: none;
+                    border: 0;
+                    outline: none;
+                    font-size: 25px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    background-color: var(--background);
+                    transition: .25s;
+                    color: var(--main-text);
+                    span {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                } button#noteManipulationButton:hover {
+                    background-color: var(--secondary);
+                } button#noteManipulationButton:active {
+                    background-color: var(--shadow);
+                }
+                div#droplist {
+                    background-color: var(--secondary);
+                    right: 0;
+                    top: 85px;
+                    right: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 10px;
+                    box-shadow: var(--shadow);
+                    font-size: 16px;
+                    position: absolute;
+                    a.item {
+                        color: var(--main-text);
+                        transition: .25s;
+                        cursor: pointer;
+                        padding: 10px 50px 10px 15px;
+                    } a.item:hover {
+                        background-color: var(--hover);
+                    } a.item:nth-child(1) {
+                        border-radius: 10px 10px 0px 0px;
+                    } a.item:nth-last-child(1) {
+                        border-radius: 0px 0px 10px 10px;
+                    }
+                } .droplist:hover,a.item button {
+                    background-color: var(--secondary);
+                }
+
+                pins {
+                    button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        outline: none;
+                        border: 0;
+                        background: none;
+                        font-size: 16px;
+                        border-radius: 10px;
+                        color: var(--main-text);
+                        cursor: pointer;
+                        transition: .25s;
+                        p {
+                            display: none;
+                            padding: 0 15px 0px 0px;
+                        }
+                        span {
+                            transition: .25s;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50px;
+                            color: var(--main-text);
+                            background-color: var(--secondary);
+                            margin: 5px;
+                        }
+                    } button:hover {
+                        span {
+                            background-color: var(--hover);
+                        }
+                    }
+                }
+            }
+
             .icon {
                 margin-top: -75px;
                 font-size: 75px;
@@ -205,7 +304,7 @@ main.app {
                 background-color: var(--background);
                 font-family: "Nunito", serif;
                 font-size: 36px;
-                margin: 75px 5px 15px 5px;
+                margin: 25px 5px 15px 5px;
                 color: var(--main-text);
                 font-weight: bold;
                 border: 0;
@@ -485,7 +584,8 @@ notifications {
     pointer-events: none;
     position: absolute;
     right: 0;
-    padding: 25px 50px;
+    bottom: 0;
+    padding: 25px;
     z-index: 4;
     display: flex;
     align-items: end;
@@ -495,15 +595,17 @@ notifications {
         margin: 5px 0;
         display: flex;
         align-items: center;
-        background-color: #f1f2f6;
+        background-color: var(--secondary);
+        border: 1px solid var(--hover);
         animation-name: noticeCreate;
         animation-duration: .25s;
-        box-shadow: var(--shadow);
         border-radius: 10px;
         max-width: 550px;
+        box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+        color: #1e272e;
         content {
             justify-self: center;
-            color: #1e272e;
+            color: var(--main-text);
             h1 {
                 font-size: 18px;
             }
@@ -595,10 +697,28 @@ homepage {
                 height: 100px;
                 padding: 5px 0;
                 color: var(--secondary-text);
-            } datetime {
-                margin: 5px 0px;
-                align-self: end;
-                color: var(--secondary-text);
+            } footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                pins {
+                    span {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: var(--background);
+                        height: 25px;
+                        width: 25px;
+                        border-radius: 50px;
+                        font-size: 14px;
+                        color: var(--main-text);
+                    }
+                }
+                datetime {
+                    margin: 5px 0px;
+                    align-self: end;
+                    color: var(--secondary-text);
+                }
             }
         } article:hover {
             transform: translateY(-5px);
@@ -629,6 +749,7 @@ homepage {
         justify-content: center;
         padding: 25px;
         width: 100%;
+        bottom: auto;
         notice {
             animation-name: noticeCreateMobile;
             display: flex;

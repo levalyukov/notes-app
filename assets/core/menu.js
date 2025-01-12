@@ -13,11 +13,11 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.3.5'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.4'],
             'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
             'token': ['fa-solid', 'fa-solid', 'fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
-            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.3']
+            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.4']
         },
         'author': '© Lev Alyukov'
     }
@@ -106,7 +106,7 @@ function slideMenu(
                             createNote()
                         }
                         updateNotesTab()
-                        if (screen.width < 750) {
+                        if (screen.width <= 750) {
                             slideMenu()
                         }
                     })
@@ -189,6 +189,7 @@ function slideMenu(
 }
 
 function updateNotesTab() {
+    const aside = document.querySelector('aside')
     const notes = []
 
     for (let i = 0; i < localStorage.length; i++) {
@@ -210,55 +211,56 @@ function updateNotesTab() {
     const existingTabs = document.querySelectorAll('.note-tab')
     existingTabs.forEach((tab) => tab.remove())
 
-    notes.forEach((noteData) => {
-        const noteTab = document.createElement('a')
-        const tabIcon = document.createElement('i')
-        const tabIconContainer = document.createElement('span')
-        const notesButtonRemove = document.createElement('button')
-        const notesIconRemoveContainer = document.createElement('span')
-        const notesIconRemove = document.createElement('i')
-
-        workspaces.appendChild(noteTab)
-        noteTab.appendChild(tabIconContainer)
-        tabIconContainer.appendChild(tabIcon)
-        noteTab.classList.add('note-tab')
-        tabIcon.classList.add('fa-solid', 'fa-note-sticky')
-
-        if (noteData.caption != "") {
-            if (noteData.caption.length > 28) {
-                noteTab.innerHTML += ' ' + noteData.caption.substring(0,28) + "..."
+    if (aside) {
+        notes.forEach((noteData) => {
+            const noteTab = document.createElement('a')
+            const tabIcon = document.createElement('i')
+            const tabIconContainer = document.createElement('span')
+            const notesButtonRemove = document.createElement('button')
+            const notesIconRemoveContainer = document.createElement('span')
+            const notesIconRemove = document.createElement('i')
+    
+            workspaces.appendChild(noteTab)
+            noteTab.appendChild(tabIconContainer)
+            tabIconContainer.appendChild(tabIcon)
+            noteTab.classList.add('note-tab')
+            tabIcon.classList.add('fa-solid', 'fa-note-sticky')
+    
+            if (noteData.caption != "") {
+                if (noteData.caption.length > 28) {
+                    noteTab.innerHTML += ' ' + noteData.caption.substring(0,28) + "..."
+                } else {
+                    noteTab.innerHTML += ' ' + noteData.caption
+                }
             } else {
-                noteTab.innerHTML += ' ' + noteData.caption
+                noteTab.innerHTML += ' ' + 'Новая заметка' + ' #' + noteData.id.substring(5)
             }
-        } else {
-            noteTab.innerHTML += ' ' + 'Новая заметка' + ' #' + noteData.id.substring(5)
-        }
-        noteTab.setAttribute('data-id', noteData.id)
-        noteTab.appendChild(notesButtonRemove)
-        notesButtonRemove.appendChild(notesIconRemoveContainer)
-        notesIconRemoveContainer.appendChild(notesIconRemove)
-        notesIconRemove.classList.add('fa-solid', 'fa-trash')
-        notesButtonRemove.classList.add('remove_note')
-
-        notesButtonRemove.addEventListener('click', (event) => {
-            event.stopPropagation()
-            removeNoteLocalStorage(noteData.id)
-            updateNotesTab()
-            const containers = document.querySelectorAll('.note-content');
-            containers.forEach((element) => {
-                element.style.animationName = "contentRemove"
-                element.addEventListener('animationend', () => {
-                    element.remove()
+            noteTab.setAttribute('data-id', noteData.id)
+            noteTab.appendChild(notesButtonRemove)
+            notesButtonRemove.appendChild(notesIconRemoveContainer)
+            notesIconRemoveContainer.appendChild(notesIconRemove)
+            notesIconRemove.classList.add('fa-solid', 'fa-trash')
+            notesButtonRemove.classList.add('remove_note')
+    
+            notesButtonRemove.addEventListener('click', (event) => {
+                event.stopPropagation()
+                removeNoteLocalStorage(noteData.id)
+                const containers = document.querySelectorAll('.note-content');
+                containers.forEach((element) => {
+                    element.style.animationName = "contentRemove"
+                    element.addEventListener('animationend', () => {
+                        element.remove()
+                    })
                 })
+                openHomePage()
             })
-            openHomePage()
+            noteTab.addEventListener('click', () => {
+                loadNoteContent(noteData.id, noteData.caption, noteData.content, noteData.pinned)
+                closeHomePage()
+                if (screen.width <= 750) {
+                    slideMenu()
+                }
+            })
         })
-        noteTab.addEventListener('click', () => {
-            loadNoteContent(noteData.id, noteData.caption, noteData.content)
-            closeHomePage()
-            if (screen.width < 750) {
-                slideMenu()
-            }
-        })
-    })
+    }
 }
