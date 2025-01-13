@@ -112,6 +112,10 @@ function createNote(
                                                 buttonPin.addEventListener('click', () => {
                                                     buttonPin.remove()
                                                     container.setAttribute('pinned', 'false')
+                                                    const droplistMenu = document.querySelectorAll('div#droplist')
+                                                    droplistMenu.forEach((e) => {
+                                                        e.remove()
+                                                    })
                                                     saveNoteLocalStorage(id)
                                                 })
                                                 buttonPin.addEventListener('mouseenter', () => {
@@ -318,6 +322,10 @@ function loadNote(
                                                 buttonPin.addEventListener('click', () => {
                                                     buttonPin.remove()
                                                     container.setAttribute('pinned', 'false')
+                                                    const droplistMenu = document.querySelectorAll('div#droplist')
+                                                    droplistMenu.forEach((e) => {
+                                                        e.remove()
+                                                    })
                                                     saveNoteLocalStorage(id)
                                                 })
                                                 buttonPin.addEventListener('mouseenter', () => {
@@ -344,7 +352,7 @@ function loadNote(
                                     } else {
                                         item.addEventListener('click', () => {
                                             const buttonPin = document.getElementById('pin')
-                                            buttonPin.remove()
+                                            if (buttonPin) {buttonPin.remove()}
                                             container.setAttribute('pinned', 'false')
                                             saveNoteLocalStorage(id)
                                             droplist.remove()

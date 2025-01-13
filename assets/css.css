@@ -530,7 +530,7 @@ modals {
 
         modal {
             border-radius: 10px;
-            width: 55vw;
+            width: 750px;
             max-height: 750px;
             overflow-y: auto;
             position: absolute;
