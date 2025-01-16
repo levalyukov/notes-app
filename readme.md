@@ -11,6 +11,7 @@ Working version: [https://levalyukov.github.io/notes-app/](https://levalyukov.gi
 - **Create notes**: Easily add new notes.
 - **Edit notes**: Change the contents of the created notes.
 - **Delete Notes**: Delete notes that are no longer needed.
+- **Workspaces system**: Group your notes into workspaces.
 
 ## Installation
 
