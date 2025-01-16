@@ -22,9 +22,7 @@ function workspaceCreate(
         const workspaceDescription = document.createElement('description')
         const navWorkspaceMenuPins = document.createElement('pins')
         const id = 'workspace-'+workspacesID
-        if (screen.width <= 750) {
-            slideMenu()
-        }
+
         closeHomePage()
         main.appendChild(workspace)
         workspace.appendChild(navWorkspaceMenu)
@@ -224,10 +222,6 @@ function workspaceLoad(
         const workspaceDescription = document.createElement('description')
         const navWorkspaceMenuPins = document.createElement('pins')
         const id = index
-        
-        if (screen.width <= 750) {
-            slideMenu()
-        }
         closeHomePage()
 
         main.appendChild(workspace)

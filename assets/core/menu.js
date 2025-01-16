@@ -378,6 +378,9 @@ function updateWorkspacesTab() {
                     workspaceData.caption,
                     workspaceData.description,
                 )
+                if (screen.width <= 750) {
+                    slideMenu()
+                }
             })
 
             workspaceButtonRemove.appendChild(workspaceIconRemoveContainer)
