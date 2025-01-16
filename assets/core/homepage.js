@@ -1,6 +1,15 @@
-function openHomePage(maxNotes = 6) {
+function openHomePage(maxNotes = 3) {
     document.title = 'Pocket Notes'
     const homepageContainer = document.querySelectorAll('homepage')
+    const workspaces = document.querySelectorAll('workspace')
+
+    if (workspaces.length > 0) {
+        workspaces.forEach((e) => {
+            e.remove()
+        })
+    }
+
+
     if (homepageContainer.length > 0) {
         closeHomePage()
         openHomePage()
@@ -36,6 +45,7 @@ function openHomePage(maxNotes = 6) {
         }
         if (localStorage.length > 0) {
             const notes = []
+            const workspaces = []
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i)
                 if (key.startsWith('note-')) {
@@ -45,6 +55,17 @@ function openHomePage(maxNotes = 6) {
                     }
                 }
             }
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i)
+                if (key.startsWith('workspace-')) {
+                    const workspaceData = JSON.parse(localStorage.getItem(key))
+                    if (workspaceData && workspaceData.id) {
+                        workspaces.push(workspaceData)
+                    }
+                }
+            }
+
             if (notes.length > 0) {
                 subtitle.innerHTML = "Последние изменения:"
                 const articleContainer = document.createElement('container')
@@ -87,6 +108,17 @@ function openHomePage(maxNotes = 6) {
                             }
                         } if (noteData.lastChange != undefined) {
                             datetime.innerHTML = noteData.lastChange.substring(0,5)
+                        } if (noteData.workspace != '') {
+                            const workspaceName = document.createElement('h2')
+                            pins.appendChild(workspaceName)
+                            const workspaceData = JSON.parse(localStorage.getItem(noteData.workspace))
+                            if (workspaceData) {
+                                if (workspaceData.caption.length > 20) {
+                                    workspaceName.innerHTML = workspaceData.caption.substring(0,20) + '...'
+                                } else {
+                                    workspaceName.innerHTML = workspaceData.caption
+                                }
+                            }
                         } if (noteData.pinned != undefined) {
                             if (noteData.pinned == 'true') {
                                 const noteIcon = document.createElement('i')
@@ -98,7 +130,13 @@ function openHomePage(maxNotes = 6) {
                         }
         
                         article.addEventListener('click', () => {
-                            loadNoteContent(noteData.id, noteData.caption, noteData.content, noteData.pinned)
+                            loadNoteContent(
+                                noteData.id, 
+                                noteData.caption, 
+                                noteData.content, 
+                                noteData.pinned, 
+                                noteData.workspace
+                            )
                             closeHomePage()
                         })
                     }

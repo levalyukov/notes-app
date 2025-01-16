@@ -1,9 +1,9 @@
 let noteIDCount = 0
 function createNote(
     noteManipulationContent = {
-        'functional': ['pinNote', 'removeNote'],
-        'captions': ['Закрепить', 'Удалить'],
-        'icons': ['fa-thumbtack', 'fa-trash'],
+        'functional': ['pinNote', 'moveWorkspace', 'removeNote'],
+        'captions': ['Закрепить', 'Переместить в область', 'Удалить'],
+        'icons': ['fa-thumbtack', 'fa-file-arrow-up', 'fa-trash'],
     }
     ) {
     noteIDCount++
@@ -57,7 +57,8 @@ function createNote(
         'caption': caption.value,
         'content': content.value,
         'lastChange': lastChange,
-        'pinned': 'false'
+        'pinned': 'false',
+        'workspace': ''
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     document.title = 'Pocket Notes: ' + 'Новая заметка #' + noteIDCount
@@ -121,7 +122,7 @@ function createNote(
                                                 buttonPin.addEventListener('mouseenter', () => {
                                                     const iconElement = document.getElementById('pinIcon')
                                                     if (!iconElement) {
-                                                        buttonPinIcon.classList.add('fa-solid', 'fa-thumbtack-slash')
+                                                        iconElement.classList.add('fa-solid', 'fa-thumbtack-slash')
                                                     } else {
                                                         iconElement.classList.remove('fa-thumbtack')
                                                         iconElement.classList.add('fa-thumbtack-slash')
@@ -148,6 +149,14 @@ function createNote(
                                             droplist.remove()
                                         })
                                     }
+                                }  if (functional[i] == "moveWorkspace") {
+                                    item.addEventListener('click', () => {
+                                        allWorkspacesModalOpen(id)
+                                        droplist.remove()
+                                        if (screen.width <= 750) {
+                                            slideMenu()
+                                        }
+                                    })
                                 } if (functional[i] == "removeNote") {
                                     item.addEventListener('click', (event) => {
                                         removeNoteLocalStorage(id)
@@ -176,17 +185,25 @@ function createNote(
             })
         }
     })
+
+    const workspaceWindow = document.querySelectorAll('workspace')
+    if (workspaceWindow.length > 0) {
+        workspaceWindow.forEach((e) => {
+            e.remove()
+        })
+    }
 }
 
 function loadNote(
     index, 
     header, 
     description, 
-    pinned, 
+    pinned,
+    workspace,
     noteManipulationContent = {
-        'functional': ['pinNote', 'removeNote'],
-        'captions': ['Закрепить', 'Удалить'],
-        'icons': ['fa-thumbtack', 'fa-trash'],
+        'functional': ['pinNote', 'moveWorkspace', 'removeNote'],
+        'captions': ['Закрепить', 'Переместить в область', 'Удалить'],
+        'icons': ['fa-thumbtack', 'fa-file-arrow-up', 'fa-trash'],
     }
     ) {
     const main = document.getElementById('note')
@@ -358,6 +375,14 @@ function loadNote(
                                             droplist.remove()
                                         })
                                     }
+                                }  if (functional[i] == "moveWorkspace") {
+                                    item.addEventListener('click', () => {
+                                        allWorkspacesModalOpen(id)
+                                        droplist.remove()
+                                        if (screen.width <= 750) {
+                                            slideMenu()
+                                        }
+                                    })
                                 } if (functional[i] == "removeNote") {
                                     item.addEventListener('click', (event) => {
                                         removeNoteLocalStorage(id)
@@ -388,7 +413,7 @@ function loadNote(
     })
 }
 
-function saveNoteLocalStorage(id, ) {
+function saveNoteLocalStorage(id) {
     const noteCaption = document.querySelector('.noteCaption')
     const noteContent = document.querySelector('.noteContent')
     const date = new Date()
@@ -398,12 +423,14 @@ function saveNoteLocalStorage(id, ) {
     const lastChange = `${hours}:${minutes}:${seconds}`
     const noteMain = document.querySelector("main.note-content") 
     const noteDataContent = noteMain.getAttribute('pinned')
+    const noteWorkspace = JSON.parse(localStorage.getItem(id))
     const noteData = {
         'id': id,
         'caption': noteCaption.value,
         'content': noteContent.value,
         'lastChange': lastChange,
-        'pinned': noteDataContent
+        'pinned': noteDataContent,
+        'workspace': noteWorkspace.workspace
     }
     localStorage.setItem(id, JSON.stringify(noteData))
     const slideMenu = document.querySelector('aside')
@@ -420,18 +447,23 @@ function saveNoteLocalStorage(id, ) {
     if (slideMenu) {updateNotesTab()}
 }
 
-function loadNoteContent(id, caption, content, pinnedStatus) {
-    const containers = document.querySelectorAll('.note-content');
-    if (containers.length === 0) {
-        loadNote(id, caption, content, pinnedStatus);
+function loadNoteContent(id, caption, content, pinnedStatus, workspace) {
+    const noteContainers = document.querySelectorAll('.note-content')
+    const workspaceContainers = document.querySelectorAll('workspace')
+    if (noteContainers.length === 0 && workspaceContainers.length === 0) {
+        loadNote(id, caption, content, pinnedStatus, workspace);
     } else {
-        containers.forEach((element) => {
+        noteContainers.forEach((element) => {
             element.style.animationName = "contentRemove"
             element.addEventListener('animationend', () => {
                 element.remove()
             })
         })
-        loadNote(id, caption, content, pinnedStatus)
+    
+        workspaceContainers.forEach((element) => {
+            element.remove()
+        })
+        loadNote(id, caption, content, pinnedStatus, workspace)
     }
 }
 
@@ -458,8 +490,22 @@ function removeNoteLocalStorage(id) {
     openHomePage()
 }
 
+function noteSetWorkspace(id, workspace) {
+    const noteData = JSON.parse(localStorage.getItem(id))
+    const noteNewData = {
+        'id': id,
+        'caption': noteData.caption,
+        'content': noteData.content,
+        'lastChange': noteData.lastChange,
+        'pinned': noteData.pinned,
+        'workspace': workspace
+    }
+    localStorage.setItem(id, JSON.stringify(noteNewData))
+}
+
 function hashClear() {
     noteIDCount = 0
+    workspacesID = 0
     localStorage.clear()
     notice(
         'Система',
@@ -468,6 +514,7 @@ function hashClear() {
     document.title = 'Pocket Notes'
     getSettings()
     updateNotesTab()
+    updateWorkspacesTab()
     openHomePage()
     const containers = document.querySelectorAll('.note-content');
     if (containers.length > 0) {

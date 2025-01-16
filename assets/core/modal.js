@@ -201,7 +201,6 @@ function openPrivacyPolicy(
         'Данные используются исключительно для работы приложения — создания, сохранения и отображения ваших заметок.',
         'Вы можете удалить все заметки (данные LocalStorage) в настройках приложения или через настройки браузера. \n\nВосстановление удалённых данных невозможно.'
     ]
-
     ) {
     const container = document.querySelector("modals")
     const background = document.createElement('background')
@@ -234,6 +233,212 @@ function openPrivacyPolicy(
             section.appendChild(p)
             p.innerHTML = contents[i]
         }
+    }
+
+    button.addEventListener('click', () => {
+        modal.style.animationName = "modalClose"
+        background.style.animationName = "modalClose-background"
+        background.addEventListener('animationend', () => {
+            background.remove()
+        })
+    })
+}
+
+function workspaceChangerModal(workspaceID, modalCaption, modalHeader, modalDescription) {
+    const container = document.querySelector("modals")
+    const background = document.createElement('background')
+    const modal = document.createElement('modal_settings')
+    const header = document.createElement('header')
+    const section = document.createElement('section')
+    const h1 = document.createElement('h1')
+    const button = document.createElement('button')
+    const buttonCloseIcon = document.createElement('i')
+
+    container.appendChild(background)
+    background.appendChild(modal)
+    modal.appendChild(header)
+    modal.appendChild(section)
+    header.appendChild(button)
+    button.appendChild(buttonCloseIcon)
+    header.appendChild(h1)
+    h1.innerHTML = modalCaption
+
+    modal.setAttribute('id', 'workspace')
+    button.setAttribute('id', 'modal-close')
+    buttonCloseIcon.classList.add('fa-solid', 'fa-xmark')
+
+    // main content
+    const inputCaptionWorkspace = document.createElement('input')
+    const textareaDescriptionWorkspace = document.createElement('textarea')
+    const headerInputCaption = document.createElement('h2')
+    const headerInputDescription = document.createElement('h2')
+    const buttonSavingChanges = document.createElement('button')
+
+    section.appendChild(headerInputCaption)
+    section.appendChild(inputCaptionWorkspace)
+    section.appendChild(headerInputDescription)
+    section.appendChild(textareaDescriptionWorkspace)
+    section.appendChild(buttonSavingChanges)
+
+    inputCaptionWorkspace.setAttribute('id', 'inputCaptionWorkspace')
+    inputCaptionWorkspace.setAttribute('placeholder', 'Введите название')
+    textareaDescriptionWorkspace.setAttribute('id', 'textareaDescriptionWorkspace')
+    textareaDescriptionWorkspace.setAttribute('placeholder', 'Введите описание')
+    buttonSavingChanges.setAttribute('id', 'buttonSavingChanges')
+
+    headerInputCaption.innerHTML = "Название"
+    headerInputDescription.innerHTML = "Описание"
+    buttonSavingChanges.innerHTML = 'Применить'
+
+    if (modalHeader != '' || modalDescription != '') {
+        inputCaptionWorkspace.value = modalHeader
+        textareaDescriptionWorkspace.innerHTML = modalDescription
+    }
+
+    buttonSavingChanges.addEventListener('click', () => {
+        const date = new Date()
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+        const seconds = String(date.getSeconds()).padStart(2, '0')
+        const lastChange = `${hours}:${minutes}:${seconds}`
+        const workspace = document.querySelector('workspace')
+        const workspaceContent = JSON.parse(localStorage.getItem(workspaceID))
+        const workspaceData = {
+            'id': workspaceID,
+            'caption': inputCaptionWorkspace.value,
+            'description': textareaDescriptionWorkspace.value,
+            'lastChange': lastChange,
+            'pinned': workspace.getAttribute('pinned'),
+            'notes': workspaceContent.notes
+        }
+        localStorage.setItem(workspaceID, JSON.stringify(workspaceData))
+        workspaceLoad(workspaceID)
+        modal.style.animationName = "modalClose"
+        background.style.animationName = "modalClose-background"
+        background.addEventListener('animationend', () => {
+            background.remove()
+        })
+        updateWorkspacesTab()
+    })
+
+    button.addEventListener('click', () => {
+        modal.style.animationName = "modalClose"
+        background.style.animationName = "modalClose-background"
+        background.addEventListener('animationend', () => {
+            background.remove()
+        })
+    })
+}
+
+function allWorkspacesModalOpen(noteID) {
+    const container = document.querySelector("modals")
+    const background = document.createElement('background')
+    const modal = document.createElement('modal_settings')
+    const header = document.createElement('header')
+    const section = document.createElement('section')
+    const h1 = document.createElement('h1')
+    const button = document.createElement('button')
+    const buttonCloseIcon = document.createElement('i')
+
+    container.appendChild(background)
+    background.appendChild(modal)
+    modal.appendChild(header)
+    modal.appendChild(section)
+    header.appendChild(button)
+    button.appendChild(buttonCloseIcon)
+    header.appendChild(h1)
+    h1.innerHTML = 'Выберите область'
+    modal.setAttribute('id', 'workspace')
+    button.setAttribute('id', 'modal-close')
+    buttonCloseIcon.classList.add('fa-solid', 'fa-xmark')
+    section.setAttribute('id', 'workspaceSelect')
+
+    // main content
+    let workspaces = []
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key.startsWith('workspace-')) {
+            const workspaceData = JSON.parse(localStorage.getItem(key))
+            workspaces.push(workspaceData)
+        }
+    }
+
+    workspaces.sort((a, b) => {
+        const idA = parseInt(a.id.replace('workspace-', ''), 10)
+        const idB = parseInt(b.id.replace('workspace-', ''), 10)
+        return idA - idB
+    })
+
+    if (workspaces.length > 0) {
+        const speficalContainer = document.createElement('ul')
+        speficalContainer.setAttribute('id','workspacesFound')
+        const noteData = JSON.parse(localStorage.getItem(noteID))
+        if (noteData.workspace === '') {
+            workspaces.forEach((workspaceData) => {
+                const article = document.createElement('article')
+                const h2 = document.createElement('h2')
+                section.appendChild(speficalContainer)
+                speficalContainer.appendChild(article)
+                article.appendChild(h2)
+                h2.innerHTML = workspaceData.caption
+                article.addEventListener('click', () => {
+                    noteSetWorkspace(noteID,workspaceData.id)
+                    notice(
+                        'Система',
+                        'Перенесено в область «' + workspaceData.caption + '»'
+                    )
+                    modal.style.animationName = "modalClose"
+                    background.style.animationName = "modalClose-background"
+                    background.addEventListener('animationend', () => {
+                        background.remove()
+                    })
+                })
+            })
+        } else {
+            const buttonRemoveWorkspace = document.createElement('button')
+            section.appendChild(buttonRemoveWorkspace)
+            buttonRemoveWorkspace.setAttribute('id', 'buttonRemoveWorkspace')
+            buttonRemoveWorkspace.innerHTML = 'Удалить из пространства'
+            buttonRemoveWorkspace.addEventListener('click', () => {
+                removeNoteFromWorkspace(noteData.id)
+                notice(
+                    'Система',
+                    'Заметка удалена из области'
+                )
+                modal.style.animationName = "modalClose"
+                background.style.animationName = "modalClose-background"
+                background.addEventListener('animationend', () => {
+                    background.remove()
+                })
+            })
+            workspaces.forEach((workspaceData) => {
+                const article = document.createElement('article')
+                const h2 = document.createElement('h2')
+                section.appendChild(speficalContainer)
+                speficalContainer.appendChild(article)
+                article.appendChild(h2)
+                h2.innerHTML = workspaceData.caption
+                article.addEventListener('click', () => {
+                    noteSetWorkspace(noteID,workspaceData.id)
+                    notice(
+                        'Система',
+                        'Перенесено в область «' + workspaceData.caption + '»'
+                    )
+                    modal.style.animationName = "modalClose"
+                    background.style.animationName = "modalClose-background"
+                    background.addEventListener('animationend', () => {
+                        background.remove()
+                    })
+                })
+            })
+        }
+    } else {
+        const paragraph = document.createElement('div')
+        const h4 = document.createElement('h4')
+        section.appendChild(paragraph)
+        paragraph.appendChild(h4)
+        h4.innerHTML = 'Нет рабочих пространств'
+        paragraph.setAttribute('id','error_paragraph')
     }
 
     button.addEventListener('click', () => {

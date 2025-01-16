@@ -4,20 +4,30 @@ function slideMenu(
         'header': 'Pocket Notes',
     },
     main_content = {
-        'header': 'Заметки',
-        'main-button': {
-            'caption': 'Создать заметку',
-            'icon': 'fa-plus',
-            'id': 'create-note'
-        }
+        'note': {
+            'header': 'Заметки',
+            'button': {
+                'caption': 'Создать заметку',
+                'icon': 'fa-plus',
+                'id': 'create-note',
+            }
+        },
+        'workspace': {
+            'header': 'Пространства',
+            'button': {
+                'caption': 'Создать рабочее пространство',
+                'icon': 'fa-folder-plus',
+                'id': 'create-workspace',
+            }
+        },
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.4.2'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.5'],
             'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
             'token': ['fa-solid', 'fa-solid', 'fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
-            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.4']
+            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.5']
         },
         'author': '© Lev Alyukov'
     }
@@ -68,48 +78,79 @@ function slideMenu(
                 h1.innerHTML = header_content['header']
             }
         } if (main_content != {}) {
-            if ('header' in main_content) {
-                const h3 = document.createElement('h3')
-                workspaces.appendChild(h3)
-                h3.innerHTML = main_content['header']
-            } if ('main-button' in main_content) {
-                if ('caption' in main_content['main-button']) {
-                    const link = document.createElement('a')
-                    workspaces.appendChild(link)
-                    if ('icon' in main_content['main-button']) {
-                        const span = document.createElement('span')
-                        const icon = document.createElement('i')
-                        link.appendChild(span)
-                        span.appendChild(icon)
-                        icon.classList.add(
-                            'fa-solid', 
-                            main_content['main-button']['icon']
-                        )
-                    }  
-                    if ('id' in main_content['main-button']) {
-                        link.setAttribute('id', main_content['main-button']['id'])
+
+            let headers = []
+            let captions = []
+            let icons = []
+            let ids = []
+
+            for (let i in main_content) {
+                if ('header' in main_content[i]) {
+                    headers.push(main_content[i]['header'])
+                } if ('button' in main_content[i]) {
+                    if ('caption' in main_content[i]['button']) { 
+                        captions.push(main_content[i]['button']['caption']) 
+                    } if ('icon' in main_content[i]['button']) {
+                        icons.push(main_content[i]['button']['icon'])
+                    } if ('id' in main_content[i]['button']) {
+                        ids.push(main_content[i]['button']['id'])
                     }
-                    link.innerHTML += ' ' + main_content['main-button']['caption']
-                    link.addEventListener('click', () => {
-                        const containers = document.querySelectorAll('.note-content')
-                        if (containers.length === 0) {
-                            createNote()
-                            closeHomePage()
-                        } else {
-                            containers.forEach((element) => {
-                                element.style.animationName = "contentRemove"
-                                element.addEventListener('animationend', () => {
-                                    element.remove()
-                                })
-                            })
-                            closeHomePage()
-                            createNote()
+                }
+            }
+            // create elements
+            if (ids != []) {
+                for (let q = 0; q < ids.length; q++) {
+                    if (ids != []) {
+                        const newSection = document.createElement('ul')
+                        workspaces.appendChild(newSection)
+                        newSection.setAttribute('id', ids[q])
+                        if (headers != []) {
+                            const headerSection = document.createElement('h3')
+                            newSection.appendChild(headerSection)
+                            headerSection.innerHTML = headers[q]
+                            if (captions != []) {
+                                const button = document.createElement('a')
+                                newSection.appendChild(button)
+                                if (icons != []) { 
+                                    const buttonIcon = document.createElement('i')
+                                    const buttonIconContainer = document.createElement('span')      
+                                    button.appendChild(buttonIconContainer)
+                                    buttonIconContainer.appendChild(buttonIcon)
+                                    buttonIcon.classList.add('fa-solid', icons[q])
+                                } if (ids != []) {
+                                    button.setAttribute('id', ids[q])
+                                    if (ids[q] == "create-note") {
+                                        button.addEventListener('click', () => {
+                                            const containers = document.querySelectorAll('.note-content')
+                                            if (containers.length === 0) {
+                                                createNote()
+                                                closeHomePage()
+                                            } else {
+                                                containers.forEach((element) => {
+                                                    element.style.animationName = "contentRemove"
+                                                    element.addEventListener('animationend', () => {
+                                                        element.remove()
+                                                    })
+                                                })
+                                                closeHomePage()
+                                                createNote()
+                                            }
+                                            updateNotesTab()
+                                            if (screen.width <= 750) {
+                                                slideMenu()
+                                            }
+                                        })
+                                    } if (ids[q] == "create-workspace") {
+                                        button.addEventListener('click', () => {
+                                            workspaceCreate()
+                                            updateWorkspacesTab()
+                                        })
+                                    }
+                                }
+                                button.innerHTML += ' ' + captions[q]
+                            } 
                         }
-                        updateNotesTab()
-                        if (screen.width <= 750) {
-                            slideMenu()
-                        }
-                    })
+                    }
                 }
             }
         } if (footer_content != {}) {
@@ -152,7 +193,7 @@ function slideMenu(
                         } if (links_ids[i] == 'privacy-policy') {
                             const appSettingsButton = document.getElementById("privacy-policy")
                             appSettingsButton.addEventListener('click', () => openPrivacyPolicy(
-                                "политика конфиденциальности"
+                                "Политика Конфиденциальности"
                             ))
                         }
                     }
@@ -186,6 +227,7 @@ function slideMenu(
         })
     }
     updateNotesTab()
+    updateWorkspacesTab()
 }
 
 function updateNotesTab() {
@@ -219,16 +261,17 @@ function updateNotesTab() {
             const notesButtonRemove = document.createElement('button')
             const notesIconRemoveContainer = document.createElement('span')
             const notesIconRemove = document.createElement('i')
+            const noteWorkspace = document.getElementById('create-note')
     
-            workspaces.appendChild(noteTab)
+            noteWorkspace.appendChild(noteTab)
             noteTab.appendChild(tabIconContainer)
             tabIconContainer.appendChild(tabIcon)
             noteTab.classList.add('note-tab')
             tabIcon.classList.add('fa-solid', 'fa-note-sticky')
     
             if (noteData.caption != "") {
-                if (noteData.caption.length > 28) {
-                    noteTab.innerHTML += ' ' + noteData.caption.substring(0,28) + "..."
+                if (noteData.caption.length > 20) {
+                    noteTab.innerHTML += ' ' + noteData.caption.substring(0,20) + "..."
                 } else {
                     noteTab.innerHTML += ' ' + noteData.caption
                 }
@@ -245,8 +288,16 @@ function updateNotesTab() {
             notesButtonRemove.addEventListener('click', (event) => {
                 event.stopPropagation()
                 removeNoteLocalStorage(noteData.id)
-                const containers = document.querySelectorAll('.note-content');
-                containers.forEach((element) => {
+                const noteContainers = document.querySelectorAll('workspace');
+                const workspaceContainers = document.querySelectorAll('workspace');
+                noteContainers.forEach((element) => {
+                    element.style.animationName = "contentRemove"
+                    element.addEventListener('animationend', () => {
+                        element.remove()
+                    })
+                })
+
+                workspaceContainers.forEach((element) => {
                     element.style.animationName = "contentRemove"
                     element.addEventListener('animationend', () => {
                         element.remove()
@@ -255,11 +306,105 @@ function updateNotesTab() {
                 openHomePage()
             })
             noteTab.addEventListener('click', () => {
-                loadNoteContent(noteData.id, noteData.caption, noteData.content, noteData.pinned)
+                loadNoteContent(
+                    noteData.id, 
+                    noteData.caption, 
+                    noteData.content, 
+                    noteData.pinned,
+                    noteData.workspace
+                )
                 closeHomePage()
                 if (screen.width <= 750) {
                     slideMenu()
                 }
+            })
+        })
+    }
+}
+
+function updateWorkspacesTab() {
+    const aside = document.querySelector('aside')
+    const workspaces = []
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key.startsWith('workspace-')) {
+            const workspaceData = JSON.parse(localStorage.getItem(key))
+            if (workspaceData && workspaceData.id) {
+                workspaces.push(workspaceData)
+            }
+        }
+    }
+
+    workspaces.sort((a, b) => {
+        const idA = parseInt(a.id.replace('workspace-', ''), 10)
+        const idB = parseInt(b.id.replace('workspace-', ''), 10)
+        return idA - idB
+    })
+
+    const existingTabs = document.querySelectorAll('.workspace-tab')
+    existingTabs.forEach((tab) => tab.remove())
+
+    if (aside) {
+        workspaces.forEach((workspaceData) => {
+            const workspaceTab = document.createElement('a')
+            const tabIcon = document.createElement('i')
+            const tabIconContainer = document.createElement('span')
+            const workspaceButtonRemove = document.createElement('button')
+            const workspaceIconRemoveContainer = document.createElement('span')
+            const workspaceIconRemove = document.createElement('i')
+            const noteWorkspace = document.getElementById('create-workspace')
+    
+            noteWorkspace.appendChild(workspaceTab)
+            workspaceTab.appendChild(tabIconContainer)
+            tabIconContainer.appendChild(tabIcon)
+            workspaceTab.classList.add('workspace-tab')
+            tabIcon.classList.add('fa-solid', 'fa-folder')
+    
+            if (workspaceData.caption != "") {
+                if (workspaceData.caption.length > 20) {
+                    workspaceTab.innerHTML += ' ' + workspaceData.caption.substring(0,20) + "..."
+                } else {
+                    workspaceTab.innerHTML += ' ' + workspaceData.caption
+                }
+            } else {
+                workspaceTab.innerHTML += ' ' + 'Новая заметка' + ' #' + workspaceData.id.substring(5)
+            }
+            workspaceTab.setAttribute('data-id', workspaceData.id)
+            workspaceTab.appendChild(workspaceButtonRemove)
+            workspaceTab.addEventListener('click', () => {
+                workspaceLoad(
+                    workspaceData.id,
+                    workspaceData.caption,
+                    workspaceData.description,
+                )
+            })
+
+            workspaceButtonRemove.appendChild(workspaceIconRemoveContainer)
+            workspaceIconRemoveContainer.appendChild(workspaceIconRemove)
+            workspaceIconRemove.classList.add('fa-solid', 'fa-trash')
+            workspaceButtonRemove.classList.add('remove_note')
+            workspaceButtonRemove.addEventListener('click', (e) => {
+                e.stopPropagation()
+                workspaceRemove(workspaceData.id)
+                updateWorkspacesTab()
+                removeWorkspaceInNotes()
+                const noteContainers = document.querySelectorAll('workspace');
+                const workspaceContainers = document.querySelectorAll('workspace');
+                noteContainers.forEach((element) => {
+                    element.style.animationName = "contentRemove"
+                    element.addEventListener('animationend', () => {
+                        element.remove()
+                    })
+                })
+
+                workspaceContainers.forEach((element) => {
+                    element.style.animationName = "contentRemove"
+                    element.addEventListener('animationend', () => {
+                        element.remove()
+                    })
+                })
+                openHomePage()
             })
         })
     }
