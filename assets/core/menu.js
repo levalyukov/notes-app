@@ -23,7 +23,7 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.5'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.5.1'],
             'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
             'token': ['fa-solid', 'fa-solid', 'fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
