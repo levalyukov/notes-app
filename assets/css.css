@@ -1118,13 +1118,12 @@ workspace {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        background-color: var(--background);
+                        background-color: var(--hover);
                         height: 25px;
                         width: 25px;
                         border-radius: 50px;
                         font-size: 14px;
-                        color: var(--main-text);
-                        margin: 0 1.5px;
+                        color: var(--secondary-text);
                     }
                 }
                 datetime {
