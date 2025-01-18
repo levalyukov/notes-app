@@ -953,16 +953,16 @@ homepage {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        background-color: var(--background);
+                        background-color: var(--hover);
                         height: 25px;
                         width: 25px;
                         border-radius: 50px;
                         font-size: 14px;
-                        color: var(--main-text);
+                        color: var(--secondary-text);
                     }
                 }
                 h2 {
-                    margin: 0 15px 0 0;
+                    margin: 0 10px 0 0;
                 }
                 datetime {
                     margin: 5px 0px;
