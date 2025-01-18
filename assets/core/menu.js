@@ -13,9 +13,9 @@ function slideMenu(
             }
         },
         'workspace': {
-            'header': 'Пространства',
+            'header': 'Папки',
             'button': {
-                'caption': 'Создать рабочее пространство',
+                'caption': 'Создать папку',
                 'icon': 'fa-folder-plus',
                 'id': 'create-workspace',
             }
@@ -23,13 +23,13 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.5.1'],
-            'icons': ['fa-gear', 'fa-shield-halved', 'fa-github'],
-            'token': ['fa-solid', 'fa-solid', 'fa-brands'],
+            'captions': ['Настройки', 'Конфиденциальность', 'v1.6.0'],
+            'icons': ['fa-gear','fa-shield-halved','fa-github'],
+            'token': ['fa-solid', 'fa-solid','fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
-            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.5']
+            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.6']
         },
-        'author': '© Lev Alyukov'
+        'author': '© Lev Alyukov 2024 -'
     }
 ) {
     const menuButton = document.getElementById('menu')
@@ -190,6 +190,9 @@ function slideMenu(
                         if (links_ids[i] == 'app-settings') {
                             const appSettingsButton = document.getElementById("app-settings")
                             appSettingsButton.addEventListener('click', () => openAppSettings())
+                        } if (links_ids[i] == 'licenses') {
+                            const appSettingsButton = document.getElementById("licenses")
+                            appSettingsButton.addEventListener('click', () => licenseModal())
                         } if (links_ids[i] == 'privacy-policy') {
                             const appSettingsButton = document.getElementById("privacy-policy")
                             appSettingsButton.addEventListener('click', () => openPrivacyPolicy(

@@ -2,16 +2,26 @@ let noteIDCount = 0
 function createNote(
     noteManipulationContent = {
         'functional': ['pinNote', 'moveWorkspace', 'removeNote'],
-        'captions': ['Закрепить', 'Переместить в область', 'Удалить'],
-        'icons': ['fa-thumbtack', 'fa-file-arrow-up', 'fa-trash'],
-    }
+        'captions': ['Закрепить', 'Определить в папку', 'Удалить'],
+        'icons': ['fa-thumbtack', 'fa-folder-open', 'fa-trash'],
+    },
+    toolbarContent = {
+        'toolbar': ['fa-list','fa-list-ol', 'fa-heading', 'fa-text-slash'],
+        'toolbarID': ['insertUnorderedList','insertOrderedList','header2', 'clear'],
+        'toolbarFormat': ['fa-bold','fa-italic','fa-underline','fa-strikethrough'],
+        'toolbarFormatID': ['bold','italic','underline','strikeThrough'],
+    },
     ) {
     noteIDCount++
     const main = document.getElementById('note')
     const container = document.createElement('main')
     const caption = document.createElement('input')
-    const content = document.createElement('textarea')
 
+    const toolbar = document.createElement('toolbar')
+    const toolbarFormat = document.createElement('toolbar')
+    toolbarFormat.setAttribute('id','format')
+
+    const editor = document.createElement('div')
     const navContainer = document.createElement('nav')
     const pins = document.createElement('pins')
     const noteManipulationButton = document.createElement('button')
@@ -35,18 +45,91 @@ function createNote(
     noteManipulationIconContainer.appendChild(noteManipulationIcon)
 
     container.appendChild(caption)
-    container.appendChild(content)
+
+    container.appendChild(toolbar)
+    container.appendChild(toolbarFormat)
+
+    if (toolbarContent != {}) {
+        let toolbarIcons = []
+        let toolbarFormatIcons = []
+        let toolbarID = []
+        let toolbarFormatID = []
+        if ('toolbar' in toolbarContent) {
+            toolbarIcons = toolbarContent['toolbar']
+        } if ('toolbarFormat' in toolbarContent) {
+            toolbarFormatIcons = toolbarContent['toolbarFormat']
+        } if ('toolbarID' in toolbarContent) {
+            toolbarID = toolbarContent['toolbarID']
+        } if ('toolbarFormatID' in toolbarContent) {
+            toolbarFormatID = toolbarContent['toolbarFormatID']
+        }
+        if (toolbarIcons.length > 0) {
+            for (let i = 0; i < toolbarIcons.length; i++) {
+                const button = document.createElement('button')
+                const buttonIcon = document.createElement('i')
+                const buttonIconContainer = document.createElement('span')
+                toolbar.appendChild(button)
+                button.appendChild(buttonIconContainer)
+                buttonIconContainer.appendChild(buttonIcon)
+                buttonIcon.classList.add('fa-solid', toolbarIcons[i])
+                if (toolbarID.length > 0) {
+                    if (toolbarID[i] == 'insertUnorderedList' || toolbarID[i] == 'insertOrderedList') {
+                        button.addEventListener('click', () => {
+                            formatText(toolbarID[i])
+                            saveNoteLocalStorage(id)
+                        })
+                    } if (toolbarID[i] == 'checkBox') {
+                        button.addEventListener('click', () => {
+                            insertCheckbox()
+                            saveNoteLocalStorage(id)
+                        })
+                    } if (toolbarID[i] == 'header2') {
+                        button.addEventListener('click', () => {
+                            formatHeading('h2')
+                            saveNoteLocalStorage(id)
+                        })
+                    } if (toolbarID[i] == 'clear') {
+                        button.addEventListener('click', () => {
+                            formatText('formatBlock', 'div')
+                            saveNoteLocalStorage(id)
+                        })
+                    }
+                }
+            }
+        } 
+
+        if (toolbarFormatIcons.length > 0) {
+            for (let i = 0; i < toolbarFormatIcons.length; i++) {
+                const button = document.createElement('button')
+                const buttonIcon = document.createElement('i')
+                const buttonIconContainer = document.createElement('span')
+                toolbarFormat.appendChild(button)
+                button.appendChild(buttonIconContainer)
+                buttonIconContainer.appendChild(buttonIcon)
+                buttonIcon.classList.add('fa-solid', toolbarFormatIcons[i])
+                if (toolbarFormatID.length > 0) {
+                    button.addEventListener('click', () => {
+                        formatText(toolbarFormatID[i])
+                    })
+                }
+            }
+        } 
+    }
+
+    container.appendChild(editor)
     caption.classList.add('noteCaption')
-    content.classList.add('noteContent')
+    editor.setAttribute('id', 'editor')
+    editor.contentEditable = true
 
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Начните излагать свои мысли')
+    editor.setAttribute('placeholder', 'Начните излагать свои мысли')
 
     caption.value = ""
-    content.value = ""
+    editor.value = ""
 
-    caption.addEventListener('input', () => saveNoteLocalStorage(id))
-    content.addEventListener('input', () => saveNoteLocalStorage(id))
+    //caption.addEventListener('input', () => saveNoteLocalStorage(id))
+    //editor.addEventListener('input', () => saveNoteLocalStorage(id))
+
     const date = new Date()
     const hours = String(date.getHours()).padStart(2, '0')
     const minutes = String(date.getMinutes()).padStart(2, '0')
@@ -55,7 +138,7 @@ function createNote(
     const noteData = {
         'id': id,
         'caption': caption.value,
-        'content': content.value,
+        'content': editor.value,
         'lastChange': lastChange,
         'pinned': 'false',
         'workspace': ''
@@ -186,6 +269,44 @@ function createNote(
         }
     })
 
+    editor.addEventListener('paste', (event) => {
+        event.preventDefault()
+        const text = (event.clipboardData || window.clipboardData).getData('text/plain')
+        const selection = window.getSelection()
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            range.deleteContents()
+            range.insertNode(document.createTextNode(text))
+        }
+    })
+
+    editor.addEventListener('paste', (event) => {
+        event.preventDefault()
+        const html = (event.clipboardData || window.clipboardData).getData('text/html')
+        const tempDiv = document.createElement('div')
+        tempDiv.innerHTML = html
+        const elements = tempDiv.querySelectorAll('*')
+        elements.forEach(element => {
+            element.removeAttribute('style')
+            element.removeAttribute('class')
+            element.removeAttribute('font')
+            element.removeAttribute('color')
+            element.removeAttribute('size')
+            const allowedTags = ['b', 'i', 'u', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']
+            if (!allowedTags.includes(element.tagName.toLowerCase())) {
+                const textNode = document.createTextNode(element.textContent)
+                element.replaceWith(textNode)
+            }
+        })
+
+        const selection = window.getSelection()
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            range.deleteContents()
+            range.insertNode(tempDiv)
+        }
+    })
+
     const workspaceWindow = document.querySelectorAll('workspace')
     if (workspaceWindow.length > 0) {
         workspaceWindow.forEach((e) => {
@@ -202,14 +323,20 @@ function loadNote(
     workspace,
     noteManipulationContent = {
         'functional': ['pinNote', 'moveWorkspace', 'removeNote'],
-        'captions': ['Закрепить', 'Переместить в область', 'Удалить'],
-        'icons': ['fa-thumbtack', 'fa-file-arrow-up', 'fa-trash'],
-    }
+        'captions': ['Закрепить', 'Определить в папку', 'Удалить'],
+        'icons': ['fa-thumbtack', 'fa-folder-open', 'fa-trash'],
+    },
+    toolbarContent = {
+        'toolbar': ['fa-list','fa-list-ol','fa-heading', 'fa-text-slash'],
+        'toolbarID': ['insertUnorderedList','insertOrderedList','header2', 'clear'],
+        'toolbarFormat': ['fa-bold','fa-italic','fa-underline','fa-strikethrough'],
+        'toolbarFormatID': ['bold','italic','underline','strikeThrough'],
+    },
     ) {
     const main = document.getElementById('note')
     const container = document.createElement('main')
     const caption = document.createElement('input')
-    const content = document.createElement('textarea')
+    const editor = document.createElement('div')
     let id = index
 
     const navContainer = document.createElement('nav')
@@ -228,19 +355,89 @@ function loadNote(
     noteManipulationButton.appendChild(noteManipulationIconContainer)
     noteManipulationIconContainer.appendChild(noteManipulationIcon)
     container.classList.add('note-content')
-    container.appendChild(caption)
-    container.appendChild(content)
-    caption.classList.add('noteCaption')
-    content.classList.add('noteContent')
 
+    const toolbar = document.createElement('toolbar')
+    const toolbarFormat = document.createElement('toolbar')
+    toolbarFormat.setAttribute('id','format')
+    editor.setAttribute('id', 'editor')
+    editor.contentEditable = true
+
+    container.appendChild(caption)
+    caption.classList.add('noteCaption')
     caption.setAttribute('placeholder', 'Заголовок')
-    content.setAttribute('placeholder', 'Начните излагать свои мысли')
+    container.appendChild(toolbar)
+    container.appendChild(toolbarFormat)
+    if (toolbarContent != {}) {
+        let toolbarIcons = []
+        let toolbarFormatIcons = []
+        let toolbarID = []
+        let toolbarFormatID = []
+        if ('toolbar' in toolbarContent) {
+            toolbarIcons = toolbarContent['toolbar']
+        } if ('toolbarFormat' in toolbarContent) {
+            toolbarFormatIcons = toolbarContent['toolbarFormat']
+        } if ('toolbarID' in toolbarContent) {
+            toolbarID = toolbarContent['toolbarID']
+        } if ('toolbarFormatID' in toolbarContent) {
+            toolbarFormatID = toolbarContent['toolbarFormatID']
+        }
+        if (toolbarIcons.length > 0) {
+            for (let i = 0; i < toolbarIcons.length; i++) {
+                const button = document.createElement('button')
+                const buttonIcon = document.createElement('i')
+                const buttonIconContainer = document.createElement('span')
+                toolbar.appendChild(button)
+                button.appendChild(buttonIconContainer)
+                buttonIconContainer.appendChild(buttonIcon)
+                buttonIcon.classList.add('fa-solid', toolbarIcons[i])
+                if (toolbarID.length > 0) {
+                    if (toolbarID[i] == 'insertUnorderedList' || toolbarID[i] == 'insertOrderedList') {
+                        button.addEventListener('click', () => {
+                            formatText(toolbarID[i])
+                        })
+                    } if (toolbarID[i] == 'checkBox') {
+                        button.addEventListener('click', () => {
+                            insertCheckbox()
+                        })
+                    } if (toolbarID[i] == 'header2') {
+                        button.addEventListener('click', () => {
+                            formatHeading('h2')
+                            saveNoteLocalStorage(id)
+                        })
+                    } if (toolbarID[i] == 'clear') {
+                        button.addEventListener('click', () => {
+                            formatText('formatBlock', 'div')
+                        })
+                    }
+                }
+            }
+        } 
+
+        if (toolbarFormatIcons.length > 0) {
+            for (let i = 0; i < toolbarFormatIcons.length; i++) {
+                const button = document.createElement('button')
+                const buttonIcon = document.createElement('i')
+                const buttonIconContainer = document.createElement('span')
+                toolbarFormat.appendChild(button)
+                button.appendChild(buttonIconContainer)
+                buttonIconContainer.appendChild(buttonIcon)
+                buttonIcon.classList.add('fa-solid', toolbarFormatIcons[i])
+                if (toolbarFormatID.length > 0) {
+                    button.addEventListener('click', () => {
+                        formatText(toolbarFormatID[i])
+                    })
+                }
+            }
+        } 
+    }
+    container.appendChild(editor)
+    editor.setAttribute('placeholder', 'Начните излагать свои мысли')
 
     caption.value = header
-    content.value = description
+    editor.innerHTML = description
 
     caption.addEventListener('input', () => saveNoteLocalStorage(id))
-    content.addEventListener('input', () => saveNoteLocalStorage(id))
+    editor.addEventListener('input', () => saveNoteLocalStorage(id))
     if (header != '') {
         if (header.length > 14) {
             document.title = 'Pocket Notes: ' + header.substring(0,14) + '...'
@@ -411,11 +608,50 @@ function loadNote(
             })
         }
     })
+
+    editor.addEventListener('paste', (event) => {
+        event.preventDefault()
+        const text = (event.clipboardData || window.clipboardData).getData('text/plain')
+        const selection = window.getSelection()
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            range.deleteContents()
+            range.insertNode(document.createTextNode(text))
+        }
+    })
+    editor.addEventListener('paste', (event) => {
+        event.preventDefault()
+        const html = (event.clipboardData || window.clipboardData).getData('text/html')
+        const tempDiv = document.createElement('div')
+        tempDiv.innerHTML = html
+        const elements = tempDiv.querySelectorAll('*')
+        elements.forEach(element => {
+            element.removeAttribute('style')
+            element.removeAttribute('class')
+            element.removeAttribute('font')
+            element.removeAttribute('color')
+            element.removeAttribute('size')
+            const allowedTags = ['b', 'i', 'u', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']
+            if (!allowedTags.includes(element.tagName.toLowerCase())) {
+                const textNode = document.createTextNode(element.textContent)
+                element.replaceWith(textNode)
+            }
+        })
+
+        const selection = window.getSelection()
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            range.deleteContents()
+            range.insertNode(tempDiv)
+        }
+
+        saveNoteLocalStorage(id)
+    })
 }
 
 function saveNoteLocalStorage(id) {
     const noteCaption = document.querySelector('.noteCaption')
-    const noteContent = document.querySelector('.noteContent')
+    const noteContent = document.querySelector('div#editor')
     const date = new Date()
     const hours = String(date.getHours()).padStart(2, '0')
     const minutes = String(date.getMinutes()).padStart(2, '0')
@@ -427,7 +663,7 @@ function saveNoteLocalStorage(id) {
     const noteData = {
         'id': id,
         'caption': noteCaption.value,
-        'content': noteContent.value,
+        'content': noteContent.innerHTML,
         'lastChange': lastChange,
         'pinned': noteDataContent,
         'workspace': noteWorkspace.workspace

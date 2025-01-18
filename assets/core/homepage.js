@@ -90,21 +90,23 @@ function openHomePage(maxNotes = 3) {
                         article.appendChild(footer)
                         footer.appendChild(pins)
                         footer.appendChild(datetime)
+
+                        const textOnly = noteData.content.replace(/<[^>]*>/g, '')
                         if (noteData.caption == '') {
                             caption.innerHTML = 'Новая заметка #' + noteData.id.substring(5)
                         } else {
                             if (noteData.caption.length > 22) {
-                                caption.innerHTML = noteData.caption.substring(0, 22) + "..."
+                                caption.innerText = noteData.caption.substring(0, 22) + "..."
                             } else {
-                                caption.innerHTML = noteData.caption
+                                caption.innerText = noteData.caption
                             }
-                        } if (noteData.content == '') {
+                        } if (textOnly.length === 0) {
                             content.innerHTML = 'Заметка пустая'
                         } else {
                             if (noteData.content.length > 125) {
-                                content.innerHTML = noteData.content.substring(0, 100) + "..."
+                                content.innerText = textOnly.replace(/\s+/g, ' ').trim().substring(0, 100) + "..."
                             } else {
-                                content.innerHTML = noteData.content
+                                content.innerText = textOnly.replace(/\s+/g, ' ').trim()
                             }
                         } if (noteData.lastChange != undefined) {
                             datetime.innerHTML = noteData.lastChange.substring(0,5)

@@ -11,10 +11,10 @@
 :root {
     /* background */
     --background: #ffffff;
-    --secondary: #f1f2f6;
+    --secondary: #F5F9FF;
     --shadow: rgba(0, 0, 0, 0.25);
     --box-shadow:rgba(0, 0, 0, 0.04) 0px 3px 5px;;
-    --hover: #e6eaef;
+    --hover: #e8f1fd;
         /* Text */
         --main-text: #1e272e;
         --secondary-text: #a4b0be;
@@ -207,6 +207,70 @@ main.app {
             flex-direction: column;
             animation-name: contentLoad;
             animation-duration: .15s;
+
+            toolbar {
+                position: sticky;
+                display: block;
+                border-radius: 10px;
+                border: 2px solid var(--secondary);
+                background-color: var(--background);
+                padding: 5px;
+                button {
+                    color: var(--main-text);
+                    cursor: pointer;
+                    border: 0;
+                    outline: none;
+                    background: none;
+                    text-decoration:line-through;
+                    padding: 5px;
+                    margin: 1.5px;
+                    border-radius: 10px;
+                    transition: .25s;
+                    span {
+                        width: 25px;
+                        height: 25px;
+                        margin: 5px;
+                        font-size: 18px;
+                    }
+                } button:hover {
+                    background-color: var(--secondary);
+                } button:active {
+                    background-color: var(--hover);
+                }
+            }
+
+            toolbar#format {
+                display: none;
+                position: absolute;
+                border-radius: 10px;
+                border: 2px solid var(--secondary);
+                background-color: var(--background);
+                padding: 5px;
+                transition: .1s;
+                button {
+                    color: var(--main-text);
+                    cursor: pointer;
+                    border: 0;
+                    outline: none;
+                    background: none;
+                    text-decoration:line-through;
+                    padding: 5px;
+                    margin: 1.5px;
+                    border-radius: 10px;
+                    transition: .25s;
+                    span {
+                        width: 25px;
+                        height: 25px;
+                        margin: 5px;
+                        font-size: 18px;
+                    }
+                } button:hover {
+                    background-color: var(--secondary);
+                } button:active {
+                    background-color: var(--hover);
+                }
+            }
+
             nav.note-manipulation {
                 display: flex;
                 align-items: center;
@@ -248,6 +312,7 @@ main.app {
                     box-shadow: var(--shadow);
                     font-size: 16px;
                     position: absolute;
+                    z-index: 1;
                     a.item {
                         color: var(--main-text);
                         transition: .25s;
@@ -310,20 +375,68 @@ main.app {
                 font-weight: bold;
                 border: 0;
                 outline: 0;
+                margin-bottom: 25px;
             }
-            textarea {
-                background-color: var(--background);
-                white-space: break-spaces;
-                padding-bottom: 25px;
-                outline: none;
-                resize: none;
-                height: 100vh;
-                border: 0;
+            div#editor {
+                margin-top: 25px;
+                direction: ltr;
                 color: var(--main-text);
                 font-size: 20px;
-                margin: 0px 5px 10px 5px;
-                font-weight: normal;
-            } input::placeholder, textarea::placeholder {
+                text-align: left;
+                white-space: pre-wrap;
+                outline: none;
+                padding: 10px;
+                word-wrap: break-word;
+
+                ul {
+                    padding-left: 25px;
+                    margin: 10px 0;
+                    li {
+                        margin: 2.5px 0px;
+                    } li::marker {
+                        content: '• ';
+                        padding-right:10px;
+                        color: var(--secondary-text);
+                    }
+                }
+
+                ul#checkbox {  
+                    li {
+                        display: flex;
+                        align-items: center;
+                        margin: -15px -25px;
+                        input[type="checkbox"] {
+                            accent-color: var(--blue);
+                            width: 20px;
+                            height: 20px;
+                            margin-right: 10px;
+                        }
+                    }
+                    li::marker {
+                        content: '';
+                    }
+                }
+
+                ol {
+                    padding-left: 25px;
+                    margin: 10px 0;
+                    li {
+                        margin: 2.5px 0px 0px 10px;
+                    } li::marker {
+                        color: var(--secondary-text);
+                    }
+                }
+
+                h2 {
+                    margin: 10px 0;
+                }
+
+                span {
+                    color: var(--main-text);
+                    font-family: 'Montserrat';
+                }
+
+            } input::placeholder, div#editor::placeholder {
                 color: var(--secondary-text);
             }
         }
@@ -957,6 +1070,7 @@ workspace {
         margin: 0px 5px;
         color: var(--secondary-text);
         font-weight: normal;
+        word-break: break-all;
     } p {
         font-family: "Nunito", serif;
         font-size: 20px;

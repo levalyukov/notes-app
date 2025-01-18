@@ -88,8 +88,7 @@ function openAppSettings(
                         } if (content_values[i][m] !== undefined && content_values[i][m] !== '') {
                             option.setAttribute('value', content_values[i][m])
                         }
-                        const key = localStorage.key('.settings')
-                        const data = JSON.parse(localStorage.getItem(key))
+                        const data = JSON.parse(localStorage.getItem('.settings'))
                         if (select.getAttribute('id') == "theme") {
                             select.value = data.theme
                         } if (select.getAttribute('id') == "language") {
@@ -245,6 +244,8 @@ function openPrivacyPolicy(
 }
 
 function workspaceChangerModal(workspaceID, modalCaption, modalHeader, modalDescription) {
+    const maxChars = 100
+
     const container = document.querySelector("modals")
     const background = document.createElement('background')
     const modal = document.createElement('modal_settings')
@@ -295,6 +296,7 @@ function workspaceChangerModal(workspaceID, modalCaption, modalHeader, modalDesc
         textareaDescriptionWorkspace.innerHTML = modalDescription
     }
 
+    textareaDescriptionWorkspace.setAttribute('maxlength', maxChars)
     buttonSavingChanges.addEventListener('click', () => {
         const date = new Date()
         const hours = String(date.getHours()).padStart(2, '0')
@@ -347,7 +349,7 @@ function allWorkspacesModalOpen(noteID) {
     header.appendChild(button)
     button.appendChild(buttonCloseIcon)
     header.appendChild(h1)
-    h1.innerHTML = 'Выберите область'
+    h1.innerHTML = 'Выберите папку'
     modal.setAttribute('id', 'workspace')
     button.setAttribute('id', 'modal-close')
     buttonCloseIcon.classList.add('fa-solid', 'fa-xmark')
@@ -385,7 +387,7 @@ function allWorkspacesModalOpen(noteID) {
                     noteSetWorkspace(noteID,workspaceData.id)
                     notice(
                         'Система',
-                        'Перенесено в область «' + workspaceData.caption + '»'
+                        'Перенесено в папку «' + workspaceData.caption + '»'
                     )
                     modal.style.animationName = "modalClose"
                     background.style.animationName = "modalClose-background"
@@ -398,13 +400,9 @@ function allWorkspacesModalOpen(noteID) {
             const buttonRemoveWorkspace = document.createElement('button')
             section.appendChild(buttonRemoveWorkspace)
             buttonRemoveWorkspace.setAttribute('id', 'buttonRemoveWorkspace')
-            buttonRemoveWorkspace.innerHTML = 'Удалить из пространства'
+            buttonRemoveWorkspace.innerHTML = 'Удалить из папки'
             buttonRemoveWorkspace.addEventListener('click', () => {
                 removeNoteFromWorkspace(noteData.id)
-                notice(
-                    'Система',
-                    'Заметка удалена из области'
-                )
                 modal.style.animationName = "modalClose"
                 background.style.animationName = "modalClose-background"
                 background.addEventListener('animationend', () => {
@@ -420,10 +418,6 @@ function allWorkspacesModalOpen(noteID) {
                 h2.innerHTML = workspaceData.caption
                 article.addEventListener('click', () => {
                     noteSetWorkspace(noteID,workspaceData.id)
-                    notice(
-                        'Система',
-                        'Перенесено в область «' + workspaceData.caption + '»'
-                    )
                     modal.style.animationName = "modalClose"
                     background.style.animationName = "modalClose-background"
                     background.addEventListener('animationend', () => {

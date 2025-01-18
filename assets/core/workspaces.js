@@ -165,12 +165,12 @@ function workspaceCreate(
             }
         })
     
-        workspaceHeader.innerHTML = 'Рабочая область #' + workspacesID
-        workspaceDescription.innerHTML = 'Описание можно изменить в настройках рабочего пространства.'
+        workspaceHeader.innerHTML = 'Папка #' + workspacesID
+        workspaceDescription.innerHTML = 'Описание можно изменить в настройках папки.'
  
         const paragraph = document.createElement('p')
         workspace.appendChild(paragraph)
-        paragraph.innerHTML = 'В данной области нет заметок.'
+        paragraph.innerHTML = 'В данной папки нет заметок.'
 
         const date = new Date()
         const hours = String(date.getHours()).padStart(2, '0')
@@ -489,13 +489,15 @@ function workspaceLoad(
                         } else {
                             caption.innerHTML = note.caption
                         }
-                    } if (note.content == '') {
+                    } 
+                    const textOnly = note.content.replace(/<[^>]*>/g, '')
+                    if (note.content.length === 0) {
                         content.innerHTML = 'Заметка пустая'
                     } else {
                         if (note.content.length > 125) {
-                            content.innerHTML = note.content.substring(0, 100) + "..."
+                            content.innerText = textOnly.replace(/\s+/g, ' ').trim().substring(0, 100) + "..."
                         } else {
-                            content.innerHTML = note.content
+                            content.innerText = textOnly.replace(/\s+/g, ' ').trim()
                         }
                     } if (note.lastChange != undefined) {
                         datetime.innerHTML = note.lastChange.substring(0,5)
@@ -554,13 +556,15 @@ function workspaceLoad(
                     } else {
                         caption.innerHTML = note.caption
                     }
-                } if (note.content == '') {
+                }
+                const textOnly = note.content.replace(/<[^>]*>/g, '')
+                if (note.content.length === 0) {
                     content.innerHTML = 'Заметка пустая'
                 } else {
                     if (note.content.length > 125) {
-                        content.innerHTML = note.content.substring(0, 100) + "..."
+                        content.innerText = textOnly.replace(/\s+/g, ' ').trim().substring(0, 100) + "..."
                     } else {
-                        content.innerHTML = note.content
+                        content.innerText = textOnly.replace(/\s+/g, ' ').trim()
                     }
                 } if (note.lastChange != undefined) {
                     datetime.innerHTML = note.lastChange.substring(0,5)
@@ -591,7 +595,7 @@ function workspaceLoad(
         else {
             const paragraph = document.createElement('p')
             workspace.appendChild(paragraph)
-            paragraph.innerHTML = 'В данной области нет заметок.'
+            paragraph.innerHTML = 'В данной папки нет заметок.'
         }
 
     } else {
