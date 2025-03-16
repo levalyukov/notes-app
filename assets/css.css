@@ -10,12 +10,12 @@
 /* Pallete */
 :root {
     /* background */
-    --background: #F5F9FF;
-    --secondary: #edf4ff;
+    --background: #fafafc;
+    --secondary: #f5f8fd;
     --shadow: rgba(0, 0, 0, 0.25);
     --box-shadow:rgba(0, 0, 0, 0.04) 0px 3px 5px;;
-    --hover: #d6e2f3;
-    --hover-dark: rgb(198, 211, 227);
+    --hover: #e8eff8;
+    --hover-dark: rgb(215, 224, 235);
         /* Text */
         --main-text: #1e272e;
         --secondary-text: #a4b0be;
