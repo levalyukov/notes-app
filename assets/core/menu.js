@@ -1,14 +1,18 @@
 function slideMenu(
     header_content = {
-        'logo-url': 'https://levalyukov.github.io/notes-app/assets/logo.png',
         'header': 'Pocket Notes',
+        'homeButton': {
+            'caption': 'Домашняя страница',
+            'icon': 'fa-house',
+            'id': 'openHomePage',
+        }
     },
     main_content = {
         'note': {
             'header': 'Заметки',
             'button': {
                 'caption': 'Создать заметку',
-                'icon': 'fa-plus',
+                'icon': 'fa-circle-plus',
                 'id': 'create-note',
             }
         },
@@ -23,13 +27,13 @@ function slideMenu(
     },
     footer_content = {
         'links': {
-            'captions': ['Настройки', 'Конфиденциальность', 'v1.6.0'],
+            'captions': ['Настройки', 'Конфиденциальность', 'GitHub'],
             'icons': ['fa-gear','fa-shield-halved','fa-github'],
             'token': ['fa-solid', 'fa-solid','fa-brands'],
             'ids': ['app-settings', 'privacy-policy', 'lasted-version'],
-            'url': ['', '', 'https://github.com/levalyukov/notes-app/releases/tag/v1.6']
+            'url': ['', '', 'https://github.com/levalyukov/notes-app']
         },
-        'author': '© Lev Alyukov 2024 -'
+        'author': '© Miroro'
     }
 ) {
     const menuButton = document.getElementById('menu')
@@ -76,6 +80,26 @@ function slideMenu(
                 const h1 = document.createElement('h1')
                 header.appendChild(h1)
                 h1.innerHTML = header_content['header']
+            } if ('homeButton' in header_content) {
+                const button = document.createElement('a')
+                header.appendChild(button)
+                if ('icon' in header_content['homeButton']) {
+                    const buttonIcon = document.createElement('i')
+                    const buttonIconContainer = document.createElement('span')
+                    button.appendChild(buttonIconContainer)
+                    buttonIconContainer.appendChild(buttonIcon)
+                    buttonIcon.classList.add('fa-solid', header_content['homeButton']['icon'])
+                }
+
+                button.innerHTML += ' ' + header_content['homeButton']['caption']
+                button.addEventListener('click', () => {
+                    if (screen.width > 750) {
+                        openHomePage()
+                    } else {
+                        openHomePage()
+                        slideMenu()
+                    } 
+                })
             }
         } if (main_content != {}) {
 
@@ -273,8 +297,8 @@ function updateNotesTab() {
             tabIcon.classList.add('fa-solid', 'fa-note-sticky')
     
             if (noteData.caption != "") {
-                if (noteData.caption.length > 20) {
-                    noteTab.innerHTML += ' ' + noteData.caption.substring(0,20) + "..."
+                if (noteData.caption.length > 15) {
+                    noteTab.innerHTML += ' ' + noteData.caption.substring(0,15) + "..."
                 } else {
                     noteTab.innerHTML += ' ' + noteData.caption
                 }
@@ -294,10 +318,7 @@ function updateNotesTab() {
                 const noteContainers = document.querySelectorAll('workspace');
                 const workspaceContainers = document.querySelectorAll('workspace');
                 noteContainers.forEach((element) => {
-                    element.style.animationName = "contentRemove"
-                    element.addEventListener('animationend', () => {
-                        element.remove()
-                    })
+                    element.remove()
                 })
 
                 workspaceContainers.forEach((element) => {
@@ -365,13 +386,13 @@ function updateWorkspacesTab() {
             tabIcon.classList.add('fa-solid', 'fa-folder')
     
             if (workspaceData.caption != "") {
-                if (workspaceData.caption.length > 20) {
-                    workspaceTab.innerHTML += ' ' + workspaceData.caption.substring(0,20) + "..."
+                if (workspaceData.caption.length > 15) {
+                    workspaceTab.innerHTML += ' ' + workspaceData.caption.substring(0,15) + "..."
                 } else {
                     workspaceTab.innerHTML += ' ' + workspaceData.caption
                 }
             } else {
-                workspaceTab.innerHTML += ' ' + 'Новая заметка' + ' #' + workspaceData.id.substring(5)
+                workspaceTab.innerHTML += ' ' + 'Папка' + ' #' + workspaceData.id.substring(10)
             }
             workspaceTab.setAttribute('data-id', workspaceData.id)
             workspaceTab.appendChild(workspaceButtonRemove)
@@ -398,10 +419,7 @@ function updateWorkspacesTab() {
                 const noteContainers = document.querySelectorAll('workspace');
                 const workspaceContainers = document.querySelectorAll('workspace');
                 noteContainers.forEach((element) => {
-                    element.style.animationName = "contentRemove"
-                    element.addEventListener('animationend', () => {
-                        element.remove()
-                    })
+                    element.remove()
                 })
 
                 workspaceContainers.forEach((element) => {

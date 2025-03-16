@@ -144,7 +144,84 @@ function openHomePage(maxNotes = 3) {
                     }
                 })
             } else {
-                subtitle.innerHTML = "Пока заметок нет, но их легко создать в меню."
+                subtitle.innerHTML = "Создайте заметку:"
+                const empty_article = document.createElement('createNote')
+                const icon = document.createElement('i')
+                const iconContainer = document.createElement('span')
+                const text = document.createElement('p')
+                const articleContainer = document.createElement('container')
+                homepage.appendChild(articleContainer)
+                articleContainer.appendChild(empty_article)
+                empty_article.setAttribute('id', 'empty')
+                empty_article.appendChild(iconContainer)
+                iconContainer.appendChild(icon)
+                icon.classList.add('fa-solid', 'fa-circle-plus')
+                empty_article.appendChild(text)
+                text.innerText = "Создать новую заметку"
+                empty_article.addEventListener('click', () => {
+                    createNote()
+                    closeHomePage()
+                    updateNotesTab()
+                })
+            } if (workspaces.length > 0) {
+                const subtitle_2 = document.createElement('h2')
+                homepage.appendChild(subtitle_2)
+                subtitle_2.innerHTML = "Ваши папки:"
+                subtitle_2.setAttribute('style', 'margin-top: 25px')
+                const workspacesContainer = document.createElement('container')
+                homepage.appendChild(workspacesContainer)
+
+                workspaces.sort((a, b) => {
+                    if (a.pinned === "true" && b.pinned !== "true") return -1;
+                    if (a.pinned !== "true" && b.pinned === "true") return 1;
+                    return b.lastChange.localeCompare(a.lastChange);
+                })
+
+                workspaces.forEach((workspace) => {
+                    const article_folder = document.createElement('article')
+                    workspacesContainer.appendChild(article_folder)
+                    article_folder.setAttribute('id', 'folder')
+    
+                    const folder_header = document.createElement('h3')
+                    const folder_description = document.createElement('p')
+                    article_folder.appendChild(folder_header)
+                    article_folder.appendChild(folder_description)
+                    folder_header.innerText = workspace.caption
+                    folder_description.innerText = workspace.description
+
+                    article_folder.addEventListener('click', () => {
+                        workspaceLoad(
+                            workspace.id,
+                            workspace.caption,
+                            workspace.description,
+                        )
+                        closeHomePage()
+                        updateWorkspacesTab()
+                    })
+                })
+            } else {
+                const subtitle_2 = document.createElement('h2')
+                homepage.appendChild(subtitle_2)
+                subtitle_2.innerHTML = "Сортируйте заметки по папкам:"
+                subtitle_2.setAttribute('style', 'margin-top: 25px')
+                const folder_empty_article = document.createElement('createNote')
+                const folder_icon = document.createElement('i')
+                const folder_iconContainer = document.createElement('span')
+                const folder_text = document.createElement('p')
+                const folder_articleContainer = document.createElement('container')
+                homepage.appendChild(folder_articleContainer)
+                folder_articleContainer.appendChild(folder_empty_article)
+                folder_empty_article.setAttribute('id', 'empty')
+                folder_empty_article.appendChild(folder_iconContainer)
+                folder_iconContainer.appendChild(folder_icon)
+                folder_icon.classList.add('fa-solid', 'fa-folder-plus')
+                folder_empty_article.appendChild(folder_text)
+                folder_text.innerText = "Создать новую папку"
+                folder_empty_article.addEventListener('click', () => {
+                    workspaceCreate()
+                    closeHomePage()
+                    updateWorkspacesTab()
+                })
             }
         }
     }

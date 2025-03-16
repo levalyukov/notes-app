@@ -305,22 +305,24 @@ function workspaceChangerModal(workspaceID, modalCaption, modalHeader, modalDesc
         const lastChange = `${hours}:${minutes}:${seconds}`
         const workspace = document.querySelector('workspace')
         const workspaceContent = JSON.parse(localStorage.getItem(workspaceID))
-        const workspaceData = {
-            'id': workspaceID,
-            'caption': inputCaptionWorkspace.value,
-            'description': textareaDescriptionWorkspace.value,
-            'lastChange': lastChange,
-            'pinned': workspace.getAttribute('pinned'),
-            'notes': workspaceContent.notes
+        if (!inputCaptionWorkspace.value.length !== 0 || !textareaDescriptionWorkspace.value.length !== 0) {
+            const workspaceData = {
+                    'id': workspaceID,
+                    'caption': inputCaptionWorkspace.value,
+                    'description': textareaDescriptionWorkspace.value,
+                    'lastChange': lastChange,
+                    'pinned': workspace.getAttribute('pinned'),
+                    'notes': workspaceContent.notes
+                }
+            localStorage.setItem(workspaceID, JSON.stringify(workspaceData))
+            workspaceLoad(workspaceID)
+            modal.style.animationName = "modalClose"
+            background.style.animationName = "modalClose-background"
+            background.addEventListener('animationend', () => {
+                background.remove()
+            })
+            updateWorkspacesTab()
         }
-        localStorage.setItem(workspaceID, JSON.stringify(workspaceData))
-        workspaceLoad(workspaceID)
-        modal.style.animationName = "modalClose"
-        background.style.animationName = "modalClose-background"
-        background.addEventListener('animationend', () => {
-            background.remove()
-        })
-        updateWorkspacesTab()
     })
 
     button.addEventListener('click', () => {
@@ -382,7 +384,11 @@ function allWorkspacesModalOpen(noteID) {
                 section.appendChild(speficalContainer)
                 speficalContainer.appendChild(article)
                 article.appendChild(h2)
-                h2.innerHTML = workspaceData.caption
+                if (workspaceData.caption.length > 15) {
+                    h2.innerHTML = workspaceData.caption.substring(0,15) + "..."
+                } else {
+                    h2.innerHTML = workspaceData.caption
+                }
                 article.addEventListener('click', () => {
                     noteSetWorkspace(noteID,workspaceData.id)
                     notice(
@@ -408,14 +414,23 @@ function allWorkspacesModalOpen(noteID) {
                 background.addEventListener('animationend', () => {
                     background.remove()
                 })
+                notice(
+                    "Система", "Успешно удалена из папки."
+                )
             })
+            const hr = document.createElement('hr')
+            section.appendChild(hr)
             workspaces.forEach((workspaceData) => {
                 const article = document.createElement('article')
                 const h2 = document.createElement('h2')
                 section.appendChild(speficalContainer)
                 speficalContainer.appendChild(article)
                 article.appendChild(h2)
-                h2.innerHTML = workspaceData.caption
+                if (workspaceData.caption.length > 12) {
+                    h2.innerHTML = workspaceData.caption.substring(0, 12) + "..."
+                } else {
+                    h2.innerHTML = workspaceData.caption
+                }
                 article.addEventListener('click', () => {
                     noteSetWorkspace(noteID,workspaceData.id)
                     modal.style.animationName = "modalClose"
@@ -431,7 +446,7 @@ function allWorkspacesModalOpen(noteID) {
         const h4 = document.createElement('h4')
         section.appendChild(paragraph)
         paragraph.appendChild(h4)
-        h4.innerHTML = 'Нет рабочих пространств'
+        h4.innerHTML = 'Нет папок'
         paragraph.setAttribute('id','error_paragraph')
     }
 

@@ -7,14 +7,12 @@
         <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
         <title></title>
     </head>
-
     <body>
         <notifications></notifications>
         <modals></modals>
         <buttonContainer><button id="menu"><i class="fa-solid fa-bars"></i></button></buttonContainer>
         <main class="app"><menu_container></menu_container><section id="note"></section></main>
-            
-        <!-- core -->
+        <!-- сore -->
         <script>
             window.onload = function() {
                 const menuButton = document.querySelector('button#menu')
@@ -24,8 +22,7 @@
                     if (key.startsWith('note-')) {
                         noteIDCount+=1
                     }
-                }
-                if (screen.width > 750) {
+                } if (screen.width > 750) {
                     slideMenu()
                 }
                 getSettings()

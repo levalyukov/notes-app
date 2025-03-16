@@ -1,17 +1,26 @@
 
 const notesLastChangesMax = 3
 let workspacesID = 0
+let deletedWorkspaceIDs = []
+
+function getNextWorkspaceID() {
+    if (deletedWorkspaceIDs.length > 0) {
+        return deletedWorkspaceIDs.shift()
+    }
+    workspacesID++;
+    return `workspace-${workspacesID}`
+}
 
 function workspaceCreate(
     workspaceManipulationContent = {
         'functional': ['pinWorkspace', 'renameWorkspace', 'removeWorkspace'],
         'captions': ['Закрепить', 'Изменить', 'Удалить'],
-        'icons': ['fa-thumbtack', 'fa-pen-to-square', 'fa-trash'],
-    }) {
+        'icons': ['fa-thumbtack', 'fa-pen-to-square', 'fa-trash']
+    }
+) {
     const notes = document.querySelectorAll('.note-content')
     const workspaces = document.querySelectorAll('workspace')
     if (workspaces.length === 0 && notes.length === 0) {
-        workspacesID++
         const main = document.getElementById('note')
         const workspace = document.createElement('workspace')
         const navWorkspaceMenu = document.createElement('nav')
@@ -21,9 +30,9 @@ function workspaceCreate(
         const workspaceHeader = document.createElement('h1')
         const workspaceDescription = document.createElement('description')
         const navWorkspaceMenuPins = document.createElement('pins')
-        const id = 'workspace-'+workspacesID
+        const id = getNextWorkspaceID()
 
-        closeHomePage()
+        closeHomePage();
         main.appendChild(workspace)
         workspace.appendChild(navWorkspaceMenu)
         workspace.appendChild(workspaceHeader)
@@ -31,17 +40,18 @@ function workspaceCreate(
 
         workspaceHeader.setAttribute('id', 'workspaceHeader')
         workspaceDescription.setAttribute('id', 'workspaceDescription')
-
         workspace.setAttribute('pinned', 'false')
+        workspace.setAttribute('id', id)
 
         navWorkspaceMenu.appendChild(navWorkspaceMenuPins)
         navWorkspaceMenu.appendChild(navWorkspaceMenuButton)
         navWorkspaceMenuButton.appendChild(navWorkspaceMenuButtonIconContainer)
         navWorkspaceMenuButtonIconContainer.appendChild(navWorkspaceMenuButtonIcon)
-        navWorkspaceMenuButtonIcon.classList.add('fa-solid','fa-ellipsis')
 
+        navWorkspaceMenuButtonIcon.classList.add('fa-solid', 'fa-ellipsis')
         navWorkspaceMenu.setAttribute('id', 'workspaceManipulation')
         navWorkspaceMenuButton.setAttribute('id', 'workspaceManipulationButton')
+
         navWorkspaceMenuButton.addEventListener('click', (e) => {
             e.stopPropagation()
             const droplists = document.querySelectorAll('div#droplist')
@@ -49,29 +59,34 @@ function workspaceCreate(
                 const droplist = document.createElement('div')
                 droplist.setAttribute('id', 'droplist')
                 navWorkspaceMenu.appendChild(droplist)
+
                 if (workspaceManipulationContent != {}) {
                     let functional = []
                     let captions = []
                     let icons = []
-                    for (let i in workspaceManipulationContent) {
-                        if ('functional' in workspaceManipulationContent) {
-                            functional = workspaceManipulationContent['functional']
-                        } if ('captions' in workspaceManipulationContent) {
-                            captions = workspaceManipulationContent['captions']
-                        } if ('icons' in workspaceManipulationContent) {
-                            icons = workspaceManipulationContent['icons']
-                        }
+
+                    if ('functional' in workspaceManipulationContent) {
+                        functional = workspaceManipulationContent['functional']
                     }
+                    if ('captions' in workspaceManipulationContent) {
+                        captions = workspaceManipulationContent['captions']
+                    }
+                    if ('icons' in workspaceManipulationContent) {
+                        icons = workspaceManipulationContent['icons']
+                    }
+
                     if (functional != []) {
                         for (let i = 0; i < functional.length; i++) {
                             const droplistButton = document.createElement('a')
                             droplistButton.classList.add('item')
                             droplist.appendChild(droplistButton)
+
                             if (icons != []) {
                                 const droplistButtonIcon = document.createElement('i')
                                 const droplistButtonIconContainer = document.createElement('span')
                                 droplistButton.appendChild(droplistButtonIconContainer)
                                 droplistButtonIconContainer.appendChild(droplistButtonIcon)
+
                                 if (functional[i] === 'pinWorkspace') {
                                     if (workspace.getAttribute('pinned') === 'false') {
                                         droplistButtonIcon.classList.add('fa-solid', 'fa-thumbtack')
@@ -81,7 +96,9 @@ function workspaceCreate(
                                 } else {
                                     droplistButtonIcon.classList.add('fa-solid', icons[i])
                                 }
-                            } if (captions != []) {
+                            }
+
+                            if (captions != []) {
                                 if (captions[i] === 'Закрепить') {
                                     if (workspace.getAttribute('pinned') === 'false') {
                                         droplistButton.innerHTML += ' ' + captions[i]
@@ -98,61 +115,25 @@ function workspaceCreate(
                                     if (workspace.getAttribute('pinned') === 'false') {
                                         workspace.setAttribute('pinned', 'true')
                                         workspaceUpdate(id)
-                                        const buttonPinned = document.createElement('button')
-                                        const buttonPinnedIcon = document.createElement('i')
-                                        const buttonPinnedIconContainer = document.createElement('span')
-                                        navWorkspaceMenuPins.appendChild(buttonPinned)
-                                        buttonPinned.appendChild(buttonPinnedIconContainer)
-                                        buttonPinnedIconContainer.appendChild(buttonPinnedIcon)
-                                        buttonPinnedIcon.classList.add('fa-solid', 'fa-thumbtack')
-                                        buttonPinnedIcon.setAttribute('id', 'pinnedIcon')
-
-                                        buttonPinned.addEventListener('click', () => {
-                                            buttonPinned.remove()
-                                            workspace.setAttribute('pinned', 'false')
-                                            const droplistMenu = document.querySelectorAll('div#droplist')
-                                            workspaceUpdate(id)
-                                            droplistMenu.forEach((e) => {
-                                                e.remove()
-                                            })
-                                        })
-
-                                        buttonPinned.addEventListener('mouseenter', () => {
-                                            const iconElement = document.getElementById('pinnedIcon')
-                                            if (!iconElement) {
-                                                iconElement.classList.add('fa-solid', 'fa-thumbtack-slash')
-                                            } else {
-                                                iconElement.classList.remove('fa-thumbtack')
-                                                iconElement.classList.add('fa-thumbtack-slash')
-                                            }
-                                        })
-
-                                        buttonPinned.addEventListener('mouseleave', () => {
-                                            const iconElement = document.getElementById('pinnedIcon')
-                                            if (iconElement) {
-                                                iconElement.classList.remove('fa-thumbtack-slash')
-                                                iconElement.classList.add('fa-thumbtack')
-                                            }
-                                        })
                                     } else {
                                         workspace.setAttribute('pinned', 'false')
                                         workspaceUpdate(id)
                                     }
                                     droplist.remove()
                                 })
-                            } if (functional[i] == "renameWorkspace") {
+                            }
+
+                            if (functional[i] == "renameWorkspace") {
                                 droplistButton.addEventListener('click', () => {
-                                    workspaceChangerModal(id, 'Изменения области', workspaceHeader.textContent, workspaceDescription.textContent)
+                                    workspaceChangerModal(id, 'Изменения папки', workspaceHeader.textContent, workspaceDescription.textContent)
                                     droplist.remove()
                                 })
-                            } if (functional[i] == "removeWorkspace") {
+                            }
+
+                            if (functional[i] == "removeWorkspace") {
                                 droplistButton.addEventListener('click', () => {
-                                    const workspaces = document.querySelectorAll('workspace')
-                                    workspaces.forEach((e) => {
-                                        e.remove()
-                                    })
-                                    openHomePage()
                                     workspaceRemove(id)
+                                    droplist.remove()
                                 })
                             }
                         }
@@ -164,26 +145,27 @@ function workspaceCreate(
                 })
             }
         })
-    
-        workspaceHeader.innerHTML = 'Папка #' + workspacesID
+
+        workspaceHeader.innerHTML = 'Папка #' + id.split('-')[1]
         workspaceDescription.innerHTML = 'Описание можно изменить в настройках папки.'
- 
         const paragraph = document.createElement('p')
         workspace.appendChild(paragraph)
-        paragraph.innerHTML = 'В данной папки нет заметок.'
+        paragraph.innerHTML = 'В данной папке нет заметок.'
 
         const date = new Date()
         const hours = String(date.getHours()).padStart(2, '0')
         const minutes = String(date.getMinutes()).padStart(2, '0')
         const seconds = String(date.getSeconds()).padStart(2, '0')
         const lastChange = `${hours}:${minutes}:${seconds}`
+
         const workspaceData = {
             'id': id,
             'caption': workspaceHeader.textContent,
             'description': workspaceDescription.textContent,
             'lastChange': lastChange,
             'pinned': workspace.getAttribute('pinned')
-        }
+        };
+
         localStorage.setItem(id, JSON.stringify(workspaceData))
     } else {
         workspaces.forEach((e) => {
@@ -194,7 +176,6 @@ function workspaceCreate(
         })
         workspaceCreate()
     }
-    
 }
 
 function workspaceLoad(
@@ -405,7 +386,7 @@ function workspaceLoad(
                                 })
                             } if (functional[i] == "renameWorkspace") {
                                 droplistButton.addEventListener('click', () => {
-                                    workspaceChangerModal(id, 'Изменения области', workspaceHeader.textContent, workspaceDescription.textContent)
+                                    workspaceChangerModal(id, 'Изменения папки', workspaceHeader.textContent, workspaceDescription.textContent)
                                     droplist.remove()
                                 })
                             } if (functional[i] == "removeWorkspace") {
@@ -482,7 +463,7 @@ function workspaceLoad(
                     footer.appendChild(pins)
                     footer.appendChild(datetime)
                     if (note.caption == '') {
-                        caption.innerHTML = 'Новая заметка #' + note.id.substring(5)
+                        caption.innerHTML = 'Новая папка #' + note.id.substring(5)
                     } else {
                         if (note.caption.length > 22) {
                             caption.innerHTML = note.caption.substring(0, 22) + "..."
@@ -549,7 +530,7 @@ function workspaceLoad(
                 footer.appendChild(pins)
                 footer.appendChild(datetime)
                 if (note.caption == '') {
-                    caption.innerHTML = 'Новая заметка #' + note.id.substring(5)
+                    caption.innerHTML = 'Новая папка #' + note.id
                 } else {
                     if (note.caption.length > 22) {
                         caption.innerHTML = note.caption.substring(0, 22) + "..."
@@ -610,6 +591,13 @@ function workspaceLoad(
 }
 
 function workspaceRemove(id) {
+    const workspaceElement = document.querySelector(`workspace[id="${id}"]`)
+    if (workspaceElement) {
+        workspaceElement.remove()
+        deletedWorkspaceIDs.push(id)
+        localStorage.removeItem(id)
+    }
+
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)
         if (key == id) {
