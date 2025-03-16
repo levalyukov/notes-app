@@ -59,15 +59,15 @@ function notice(
             })
         })
 
-        setTimeout(() => {
-            if (screen.width > 750) {
-                notice.style.animationName = "noticeRemove"
-            } else {
-                notice.style.animationName = "noticeRemoveMobile"
-            }
-            notice.addEventListener('animationend', () => {
-                notice.remove()
-            })
-        }, 5000)
+        //  setTimeout(() => {
+        //      if (screen.width > 750) {
+        //          notice.style.animationName = "noticeRemove"
+        //      } else {
+        //          notice.style.animationName = "noticeRemoveMobile"
+        //      }
+        //      notice.addEventListener('animationend', () => {
+        //          notice.remove()
+        //      })
+        //  }, 5000)
     }
 }

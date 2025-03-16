@@ -1,4 +1,4 @@
-function openHomePage(maxNotes = 3) {
+function openHomePage(maxNotes = 6, maxWorkspaces = 6) {
     document.title = 'Pocket Notes'
     const homepageContainer = document.querySelectorAll('homepage')
     const workspaces = document.querySelectorAll('workspace')
@@ -179,25 +179,28 @@ function openHomePage(maxNotes = 3) {
 
                 workspaces.forEach((workspace) => {
                     const article_folder = document.createElement('article')
-                    workspacesContainer.appendChild(article_folder)
-                    article_folder.setAttribute('id', 'folder')
-    
-                    const folder_header = document.createElement('h3')
-                    const folder_description = document.createElement('p')
-                    article_folder.appendChild(folder_header)
-                    article_folder.appendChild(folder_description)
-                    folder_header.innerText = workspace.caption
-                    folder_description.innerText = workspace.description
+                    const all_folders = document.querySelectorAll('article#folder')
+                    if (all_folders.length < maxWorkspaces) {
+                        workspacesContainer.appendChild(article_folder)
+                        article_folder.setAttribute('id', 'folder')
+                    
+                        const folder_header = document.createElement('h3')
+                        const folder_description = document.createElement('p')
+                        article_folder.appendChild(folder_header)
+                        article_folder.appendChild(folder_description)
+                        folder_header.innerText = workspace.caption
+                        folder_description.innerText = workspace.description
 
-                    article_folder.addEventListener('click', () => {
-                        workspaceLoad(
-                            workspace.id,
-                            workspace.caption,
-                            workspace.description,
-                        )
-                        closeHomePage()
-                        updateWorkspacesTab()
-                    })
+                        article_folder.addEventListener('click', () => {
+                            workspaceLoad(
+                                workspace.id,
+                                workspace.caption,
+                                workspace.description,
+                            )
+                            closeHomePage()
+                            updateWorkspacesTab()
+                        })
+                    }
                 })
             } else {
                 const subtitle_2 = document.createElement('h2')
