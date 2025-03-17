@@ -985,7 +985,7 @@ homepage {
             color: var(--main-text);
         }
 
-        article {
+        article#note {
             cursor: pointer;
             background-color: var(--secondary);
             width: 400px;
@@ -1057,9 +1057,31 @@ homepage {
                 color: var(--main-text);
             } p {
                 font-size: 18px;
-                margin: 5px 0px;
+                margin: 5px 0px 25px 0;
                 padding: 5px 0;
                 color: var(--secondary-text); 
+            } footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                pins {
+                    display: flex;
+                    h2 {
+                        margin: 0 10px 0 0;
+                        font-weight: bold;
+                    }
+                    span {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: var(--hover);
+                        height: 25px;
+                        width: 25px;
+                        border-radius: 50px;
+                        font-size: 14px;
+                        color: var(--secondary-text);
+                    }
+                }
             }
         }
     }

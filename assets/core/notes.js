@@ -149,7 +149,7 @@ function createNote(
         'workspace': ''
     };
     localStorage.setItem(id, JSON.stringify(noteData));
-    document.title = 'Pocket Notes: ' + 'Новая заметка #' + id.substring(5);
+    document.title = 'Pocket Notes: ' + 'Новая заметка'
 
     container.setAttribute('pinned', false);
     noteManipulationButton.addEventListener('click', () => {
@@ -415,7 +415,7 @@ function loadNote(
             document.title = 'Pocket Notes: ' + header
         }
     } else {
-        document.title = 'Pocket Notes: ' + 'Новая заметка #' + index.substring(5)
+        document.title = 'Pocket Notes: ' + 'Новая заметка'
     }
 
     if (pinned != null) {
@@ -645,7 +645,7 @@ function saveNoteLocalStorage(id) {
             document.title = 'Pocket Notes: ' + noteCaption.value
         } 
     } else {
-        document.title = 'Pocket Notes: ' + 'Новая заметка #' + id.substring(5)
+        document.title = 'Pocket Notes: ' + 'Новая заметка'
     }
 
     if (slideMenu) {updateNotesTab()}

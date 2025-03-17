@@ -283,8 +283,10 @@ function workspaceChangerModal(workspaceID, modalCaption, modalHeader, modalDesc
 
     inputCaptionWorkspace.setAttribute('id', 'inputCaptionWorkspace')
     inputCaptionWorkspace.setAttribute('placeholder', 'Введите название')
+    inputCaptionWorkspace.setAttribute('maxlength', '50')
     textareaDescriptionWorkspace.setAttribute('id', 'textareaDescriptionWorkspace')
     textareaDescriptionWorkspace.setAttribute('placeholder', 'Введите описание')
+    textareaDescriptionWorkspace.setAttribute('maxlength', '50')
     buttonSavingChanges.setAttribute('id', 'buttonSavingChanges')
 
     headerInputCaption.innerHTML = "Название"

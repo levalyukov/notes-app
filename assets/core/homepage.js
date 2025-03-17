@@ -90,10 +90,11 @@ function openHomePage(maxNotes = 6, maxWorkspaces = 6) {
                         article.appendChild(footer)
                         footer.appendChild(pins)
                         footer.appendChild(datetime)
+                        article.setAttribute('id', 'note')
 
                         const textOnly = noteData.content.replace(/<[^>]*>/g, '')
                         if (noteData.caption == '') {
-                            caption.innerHTML = 'Новая заметка #' + noteData.id.substring(5)
+                            caption.innerHTML = 'Новая заметка'
                         } else {
                             if (noteData.caption.length > 22) {
                                 caption.innerText = noteData.caption.substring(0, 22) + "..."
@@ -191,6 +192,20 @@ function openHomePage(maxNotes = 6, maxWorkspaces = 6) {
                         folder_header.innerText = workspace.caption
                         folder_description.innerText = workspace.description
 
+                        const footer = document.createElement('footer')
+                        const pins = document.createElement('pins')
+                        article_folder.appendChild(footer)
+                        footer.appendChild(pins)
+
+                        if (workspace.pinned != undefined) {
+                            if (workspace.pinned == 'true') {
+                                const workspaceIcon = document.createElement('i')
+                                const workspaceIconContainer = document.createElement('span')
+                                pins.appendChild(workspaceIconContainer)
+                                workspaceIconContainer.appendChild(workspaceIcon)
+                                workspaceIcon.classList.add('fa-solid','fa-thumbtack')
+                            }
+                        }
                         article_folder.addEventListener('click', () => {
                             workspaceLoad(
                                 workspace.id,

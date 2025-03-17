@@ -146,7 +146,7 @@ function workspaceCreate(
             }
         })
 
-        workspaceHeader.innerHTML = 'Папка #' + id.split('-')[1]
+        workspaceHeader.innerHTML = 'Новая папка'
         workspaceDescription.innerHTML = 'Описание можно изменить в настройках папки.'
         const paragraph = document.createElement('p')
         workspace.appendChild(paragraph)
@@ -463,7 +463,7 @@ function workspaceLoad(
                     footer.appendChild(pins)
                     footer.appendChild(datetime)
                     if (note.caption == '') {
-                        caption.innerHTML = 'Новая папка #' + note.id.substring(5)
+                        caption.innerHTML = 'Новая папка'
                     } else {
                         if (note.caption.length > 22) {
                             caption.innerHTML = note.caption.substring(0, 22) + "..."
@@ -530,7 +530,7 @@ function workspaceLoad(
                 footer.appendChild(pins)
                 footer.appendChild(datetime)
                 if (note.caption == '') {
-                    caption.innerHTML = 'Новая папка #' + note.id
+                    caption.innerHTML = 'Новая папка'
                 } else {
                     if (note.caption.length > 22) {
                         caption.innerHTML = note.caption.substring(0, 22) + "..."

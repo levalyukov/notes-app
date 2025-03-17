@@ -303,7 +303,7 @@ function updateNotesTab() {
                     noteTab.innerHTML += ' ' + noteData.caption
                 }
             } else {
-                noteTab.innerHTML += ' ' + 'Новая заметка' + ' #' + noteData.id.substring(5)
+                noteTab.innerHTML += ' ' + 'Новая заметка'
             }
             noteTab.setAttribute('data-id', noteData.id)
             noteTab.appendChild(notesButtonRemove)
@@ -386,13 +386,13 @@ function updateWorkspacesTab() {
             tabIcon.classList.add('fa-solid', 'fa-folder')
     
             if (workspaceData.caption != "") {
-                if (workspaceData.caption.length > 15) {
-                    workspaceTab.innerHTML += ' ' + workspaceData.caption.substring(0,15) + "..."
+                if (workspaceData.caption.length > 12) {
+                    workspaceTab.innerHTML += ' ' + workspaceData.caption.substring(0,12) + "..."
                 } else {
                     workspaceTab.innerHTML += ' ' + workspaceData.caption
                 }
             } else {
-                workspaceTab.innerHTML += ' ' + 'Папка' + ' #' + workspaceData.id.substring(10)
+                workspaceTab.innerHTML += ' ' + 'Новая папка'
             }
             workspaceTab.setAttribute('data-id', workspaceData.id)
             workspaceTab.appendChild(workspaceButtonRemove)
