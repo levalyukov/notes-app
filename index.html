@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="assets/css.css">
         <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css" rel="stylesheet" />
         <title></title>
     </head>
     <body>
@@ -22,7 +23,12 @@
                     if (key.startsWith('note-')) {
                         noteIDCount+=1
                     }
-                } if (screen.width > 750) {
+                } for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i)
+                    if (key.startsWith('workspace-')) {
+                        workspacesID+=1
+                    }
+                }  if (screen.width > 750) {
                     slideMenu()
                 }
                 getSettings()
@@ -38,5 +44,6 @@
         <script src="assets/core/workspaces.js"></script>
         <script src="assets/core/format.js"></script>
         <script src="https://kit.fontawesome.com/9aaf1c70ab.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     </body>
 </html>

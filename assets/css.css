@@ -2,6 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
 
 ::-webkit-scrollbar {
     width: 0px;
@@ -38,6 +39,7 @@
     --shadow:rgba(0, 0, 0, 0.5);
     --hover: #57606f;
     --hover-dark: rgb(135, 141, 152);
+    --code-editor: #212631;
         /* Text */
         --main-text: #f1f2f6;
         --secondary-text: #a4b0be;
@@ -428,7 +430,7 @@ main.app {
                     margin: 10px 0;
                     font-size: 20px;
                     li {
-                        margin: 20px 0px 0px 10px;
+                        margin: 10px 0px 0px 10px;
                     } li::marker {
                         content: '• ';
                         color: var(--secondary-text);
@@ -458,7 +460,7 @@ main.app {
                     margin: 10px 0;
                     font-size: 20px;
                     li {
-                        margin: 20px 0px 0px 10px;
+                        margin: 10px 0px 0px 10px;
                     } li::marker {
                         color: var(--secondary-text);
                     }

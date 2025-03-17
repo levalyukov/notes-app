@@ -124,10 +124,10 @@ function createNote(
         } 
     }
 
-    container.appendChild(editor);
-    caption.classList.add('noteCaption');
-    editor.setAttribute('id', 'editor');
-    editor.contentEditable = true;
+    container.appendChild(editor)
+    caption.classList.add('noteCaption')
+    editor.setAttribute('id', 'editor')
+    editor.contentEditable = true
 
     caption.setAttribute('placeholder', 'Заголовок');
     editor.setAttribute('placeholder', 'Начните излагать свои мысли');
@@ -297,7 +297,7 @@ function loadNote(
         'icons': ['fa-thumbtack', 'fa-folder-open', 'fa-trash'],
     },
     toolbarContent = {
-        'toolbar': ['fa-list','fa-list-ol','fa-heading', 'fa-text-slash'],
+        'toolbar': ['fa-list','fa-list-ol', 'fa-heading', 'fa-text-slash'],
         'toolbarID': ['insertUnorderedList','insertOrderedList','header2', 'clear'],
         'toolbarFormat': ['fa-bold','fa-italic','fa-underline','fa-strikethrough'],
         'toolbarFormatID': ['bold','italic','underline','strikeThrough'],

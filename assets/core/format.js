@@ -7,8 +7,8 @@ function formatText(command, value = null) {
 }
 
 function formatHeading(headingType) {
-    const editor = document.getElementById('editor');
-    const selection = window.getSelection();
+    const editor = document.getElementById('editor')
+    const selection = window.getSelection()
     if (!editor.contains(selection.anchorNode)) {
         return;
     }
@@ -30,6 +30,7 @@ function formatHeading(headingType) {
                 const heading = document.createElement(headingType);
                 heading.textContent = "Новый заголовок";
                 editor.appendChild(heading);
+                heading.contentEditable = true
                 const newRange = document.createRange();
                 newRange.selectNodeContents(heading);
                 newRange.collapse(false);
